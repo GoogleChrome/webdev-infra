@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "html-escaper": "^3.0.0",
+    "typedoc": "^0.20.20"
+  }
+}
