@@ -57,22 +57,22 @@ export interface NamesSet {
   data: {[name: string]: RawSymbolInfo};
 }
 
-export interface CommentHelper {
+export interface CommentHelper<T = typedocModels.Reflection> {
 
   /**
    * Resolves the ambiguous "foo.Bar" syntax into a complete Reflection, or void if not available
    * in this project.
    */
-  resolveLink(name: string): typedocModels.Reflection|void;
+  resolveLink(name: string): T|void;
 
   /**
    * Generates a HTML link to the target, or blank for don't include a link.
    */
-  generateHref(resolved: typedocModels.Reflection): string;
+  generateHref(resolved: T): string;
 
   /**
    * Resolves an existing HTML link to a reflection, or an updated href, blank for remove.
    */
-  resolveExistingHref(href: string): typedocModels.Reflection|string;
+  resolveExistingHref(href: string): T|string;
 
 }

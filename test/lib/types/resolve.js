@@ -1,0 +1,50 @@
+/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License t
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+import test from 'ava';
+import {resolveLink} from '../../../lib/types/resolve.js';
+import {parse} from './helper.js';
+
+
+test('resolveLink', t => {
+  const project = parse(`
+declare namespace chrome {
+  export namespace foo {
+    export type Foo = number;
+  }
+  export namespace bar {
+    export type Bar = number;
+    export function barFunc(arg2: number, arg: {x: string}): void;
+    export function barFunc(arg: {x: number}): void;
+  }
+}
+  `);
+
+  const r = project.findReflectionByName('chrome.foo.Foo');
+  if (!r) {
+    throw new Error(`can't find chrome.foo.Foo`);
+  }
+
+  t.is(resolveLink(r, 'foo.Foo'), r);
+  t.truthy(resolveLink(r, 'bar.Bar'));
+  t.truthy(resolveLink(r, 'chrome.bar'));
+  t.falsy(resolveLink(r, 'Bar'));
+
+  t.truthy(resolveLink(r, 'bar.barFunc.arg.x'));
+  t.truthy(resolveLink(r, 'chrome.bar.barFunc.arg2'));
+  t.falsy(resolveLink(r, 'bar.barFunc.arg2.x'));
+});
