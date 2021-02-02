@@ -36,6 +36,8 @@ export interface SymbolInfo {
   release?: ReleaseType;
 }
 
+export type LiteralTypeOption = string | number | boolean | null | bigint;
+
 /**
  * Data about symbols inside Chrome. Missing data just implies defaults.
  */

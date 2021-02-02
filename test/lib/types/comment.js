@@ -16,8 +16,7 @@
 
 
 import test from 'ava';
-import {formatCommentLine} from '../../../lib/types/comment.js';
-import {resolveLink} from '../../../lib/types/resolve.js';
+import {formatComment, formatCommentLine} from '../../../lib/types/comment.js';
 import * as symbolTypes from '../../../types/symbol.js';
 import {parse} from './helper.js';
 
@@ -59,9 +58,48 @@ test('formatCommentLine @link', t => {
 });
 
 test('formatCommentLine rewrite', t => {
-  // TODO(samthor): Test rewriting existing URLs.
+  const helper = Object.assign({}, failureHelper, {
+    /** @return {number|string} */
+    resolveExistingHref(raw) {
+      if (raw === 'old-page.html') {
+        return '../old-page';
+      } else if (raw === 'remove.html#foo') {
+        return '';
+      }
+      throw new Error(`unexpected arg: ${raw}`);
+    },
+  });
+
+  t.is(
+    formatCommentLine(`Hello <a href="old-page.html">Old!</a>`, helper),
+    'Hello <a href="../old-page">Old!</a>',
+  );
+  t.is(
+    formatCommentLine(`Remove <a href="remove.html#foo">Bye</a>`, helper),
+    'Remove <a >Bye</a>',
+  );
 });
 
 test('formatComment', t => {
-  // TODO(samthor): Ensure we end up with a <p></p> at the end of this.
+  const project = parse(`
+/**
+ * Tests some HTML inside a comment. This is long and extends over a single
+ * line.
+ *
+ * This second part arrives inside a paragraph tag and has its own <b>HTML</b>.
+ *
+ * @deprecated This isn't included as part of the output
+ * @random-tag Nor this
+ */
+export const foo = 123;
+  `);
+ 
+  const reflection = project.findReflectionByName('foo');
+  t.truthy(reflection?.comment);
+
+  // TODO(samthor): This isn't perfect and should be improved over time.
+  const expected = `<p>Tests some HTML inside a comment. This is long and extends over a single
+line.
+This second part arrives inside a paragraph tag and has its own <b>HTML</b>.</p>`;
+  t.is(formatComment(reflection?.comment, failureHelper), expected);
 });

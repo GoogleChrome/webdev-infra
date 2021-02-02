@@ -17,7 +17,8 @@
 
 import test from 'ava';
 import {parse, typeOf} from './helper.js';
-import {matchArrayType, matchTypeLiteral} from '../../../lib/types/intersection.js';
+import {matchArrayType, matchEnum, matchTypeLiteral, matchUnifiedFunction} from '../../../lib/types/match.js';
+import * as typedocModels from 'typedoc/dist/lib/models/index.js';
 
 
 test('array types', t => {
@@ -47,6 +48,7 @@ test('type literal', t => {
   const project = parse(`
 export var shared: Date & {
   hello?: number;
+  fn(arg: undefined): string;
 };
 export type literalOnly = { foo: 123 };
 export var solo: Date;
@@ -57,6 +59,10 @@ export var solo: Date;
   t.truthy(sharedLiteral?.root);
   t.true(sharedLiteral?.properties?.['hello'].optional);
 
+  t.truthy(sharedLiteral?.properties?.['fn']);
+  const dt = /** @type {typedocModels.ReflectionType} */ (sharedLiteral?.properties?.['fn'].type);
+  t.is(dt.declaration.signatures?.length, 1);
+
   const literalOnlyType = typeOf(project, 'literalOnly');
   const literalOnlyLiteral = matchTypeLiteral(literalOnlyType);
   t.falsy(literalOnlyLiteral?.root);
@@ -65,4 +71,41 @@ export var solo: Date;
 
   const soloType = typeOf(project, 'solo');
   t.falsy(matchArrayType(soloType), 'type without TypeLiteral is ignored');
+});
+
+test('string enum', t => {
+  const project = parse(`
+export type Single = 'single';
+export type Multi = 'one' | 'two' | 345;
+  `);
+
+  const singleReflection = project.getChildByName('Single');
+  const singleEnum = matchEnum(singleReflection);
+  t.deepEqual(singleEnum, ['single']);
+
+  const multiReflection = project.getChildByName('Multi');
+  const multiEnum = matchEnum(multiReflection);
+  t.deepEqual(multiEnum, ['one', 'two', 345]);
+});
+
+test('unified function', t => {
+  const project = parse(`
+export function foo(a: number, b: string, c?: string): void;
+export function foo(b: string, c?: string): void;
+export function foo(b: string): void;
+
+export function bar(a: number, b: string): void;
+export function bar(a: string): void;
+`);
+
+  const fooReflection = project.getChildByName('foo');
+  const fooUnified = matchUnifiedFunction(fooReflection);
+  t.truthy(fooUnified);
+  t.is(fooUnified?.parameters.length, 3);
+  t.true(fooUnified?.parameters[0].optional, '0th arg optional, missing in short signature');
+  t.false(fooUnified?.parameters[1].optional, '1st arg required');
+  t.true(fooUnified?.parameters[2].optional, '2nd arg optional');
+
+  const barReflection = project.getChildByName('bar');
+  t.falsy(matchUnifiedFunction(barReflection), 'incompatible signatures should not match');
 });
