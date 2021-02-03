@@ -22,7 +22,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "types": "tsc lib/types/*.js --declaration --allowJs --emitDeclarationOnly --outDir lib/types/",
+    "types": "rm lib/types/*.d.ts; tsc lib/types/*.js --declaration --allowJs --emitDeclarationOnly --outDir lib/types/",
     "rollup": "rollup lib/types/index.js -f cjs -o lib/types/index.cjs"
   }
 }

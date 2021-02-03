@@ -23,22 +23,22 @@ export function matchArrayType(type?: typedocModels.Type | undefined): {
  * @param {typedocModels.Type} type
  * @return {{[name: string]: typedocModels.DeclarationReflection}=}
  */
-export function internalMatchTypeLiteral(type: typedocModels.Type): {
+export function internalMatchTypeLiteralOnly(type: typedocModels.Type): {
     [name: string]: typedocModels.DeclarationReflection;
 };
 /**
  * Finds a type literal, possibly intersected with another initial root type.
  *
- * This is found inside {@link chrome.storage} as some type instances also have properties applied
- * to them.
+ * The intersection case is found inside {@link chrome.storage} as some type instances also have
+ * properties applied to them.
  *
- * @param {typedocModels.Reflection=} reflection
+ * @param {typedocModels.Type=} type
  * @return {{
  *   root?: typedocModels.Type,
  *   properties: {[name: string]: typedocModels.DeclarationReflection},
  * }=}
  */
-export function matchTypeLiteral(reflection?: typedocModels.Reflection | undefined): {
+export function matchTypeLiteral(type?: typedocModels.Type | undefined): {
     root?: typedocModels.Type;
     properties: {
         [name: string]: typedocModels.DeclarationReflection;

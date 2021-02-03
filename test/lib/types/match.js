@@ -57,8 +57,8 @@ export type literalOnly = { foo: 123 };
 export var solo: Date;
   `);
 
-  const sharedReflection = project.getChildByName('shared');
-  const sharedLiteral = matchTypeLiteral(sharedReflection);
+  const sharedType = typeOf(project, 'shared');
+  const sharedLiteral = matchTypeLiteral(sharedType);
   t.truthy(sharedLiteral?.properties?.['hello'], 'shared literal must have hello');
   t.truthy(sharedLiteral?.root, 'shared literal must have root');
 
@@ -66,14 +66,14 @@ export var solo: Date;
   const dt = /** @type {typedocModels.DeclarationReflection} */ (sharedLiteral?.properties?.['fn']);
   t.is(dt.signatures?.length, 1);
 
-  const literalOnlyReflection = project.getChildByName('literalOnly');
-  const literalOnlyLiteral = matchTypeLiteral(literalOnlyReflection);
+  const literalOnlyType = typeOf(project, 'literalOnly');
+  const literalOnlyLiteral = matchTypeLiteral(literalOnlyType);
   t.falsy(literalOnlyLiteral?.root);
   t.truthy(literalOnlyLiteral?.properties?.['foo']);
   t.falsy(isOptional(literalOnlyLiteral?.properties?.['foo']));
 
-  const soloReflection = project.getChildByName('solo');
-  t.falsy(matchTypeLiteral(soloReflection), 'type without TypeLiteral is ignored');
+  const soloType = typeOf(project, 'solo');
+  t.falsy(matchTypeLiteral(soloType), 'type without TypeLiteral is ignored');
 });
 
 test('string enum', t => {
