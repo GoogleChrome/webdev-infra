@@ -16,7 +16,7 @@
 
 
 import test from 'ava';
-import {exportedChildren, resolveLink} from '../../../lib/types/resolve.js';
+import {exportedChildren, resolveLink, fullName} from '../../../lib/types/resolve.js';
 import {parse} from './helper.js';
 import * as typedocModels from 'typedoc/dist/lib/models/index.js';
 
@@ -48,6 +48,12 @@ declare namespace chrome {
   t.truthy(resolveLink(r, 'bar.barFunc.arg.x'));
   t.truthy(resolveLink(r, 'chrome.bar.barFunc.arg2'));
   t.falsy(resolveLink(r, 'bar.barFunc.arg2.x'));
+
+  const arg2 = resolveLink(r, 'chrome.bar.barFunc.arg2');
+  if (!arg2) {
+    throw new Error(`couldn't resolve for test`);
+  }
+  t.is(fullName(arg2), 'chrome.bar.barFunc.arg2');
 });
 
 test('exportedChildren', t => {
