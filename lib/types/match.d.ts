@@ -1,4 +1,9 @@
 /**
+ * @param {typedocModels.Reflection=} reflection
+ * @return {boolean}
+ */
+export function isOptional(reflection?: typedocModels.Reflection | undefined): boolean;
+/**
  * Finds an array type from the passed model type. This is required as we also infer restricted
  * array types from tuples, intersection and union types.
  *
@@ -15,24 +20,28 @@ export function matchArrayType(type?: typedocModels.Type | undefined): {
     elementType: typedocModels.Type;
 } | undefined;
 /**
+ * @param {typedocModels.Type} type
+ * @return {{[name: string]: typedocModels.DeclarationReflection}=}
+ */
+export function internalMatchTypeLiteral(type: typedocModels.Type): {
+    [name: string]: typedocModels.DeclarationReflection;
+};
+/**
  * Finds a type literal, possibly intersected with another initial root type.
  *
  * This is found inside {@link chrome.storage} as some type instances also have properties applied
  * to them.
  *
- * @param {typedocModels.Type=} type
+ * @param {typedocModels.Reflection=} reflection
  * @return {{
  *   root?: typedocModels.Type,
- *   properties?: {[name: string]: {type: typedocModels.Type, optional?: boolean}},
+ *   properties: {[name: string]: typedocModels.DeclarationReflection},
  * }=}
  */
-export function matchTypeLiteral(type?: typedocModels.Type | undefined): {
+export function matchTypeLiteral(reflection?: typedocModels.Reflection | undefined): {
     root?: typedocModels.Type;
-    properties?: {
-        [name: string]: {
-            type: typedocModels.Type;
-            optional?: boolean;
-        };
+    properties: {
+        [name: string]: typedocModels.DeclarationReflection;
     };
 };
 /**
