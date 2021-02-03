@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "@types/node": "^14.14.22",
-    "ava": "^3.15.0",
     "html-escaper": "^3.0.0",
     "typedoc": "^0.20.20"
   },
   "devDependencies": {
+    "ava": "^3.15.0",
     "tmp": "^0.2.1"
   },
-  "type": "module"
+  "type": "module",
+  "private": true
 }
