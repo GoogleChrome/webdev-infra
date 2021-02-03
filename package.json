@@ -2,13 +2,22 @@
   "name": "webdev-infra",
   "dependencies": {
     "@types/node": "^14.14.22",
-    "html-escaper": "^3.0.0",
-    "typedoc": "^0.20.20"
+    "html-escaper": "^3.0.0"
   },
   "devDependencies": {
     "ava": "^3.15.0",
-    "tmp": "^0.2.1"
+    "tmp": "^0.2.1",
+    "typedoc": "^0.20.20"
+  },
+  "peerDependencies": {
+    "typedoc": "^0.20.20"
+  },
+  "exports": {
+    "./lib/types": "./lib/types/index.js"
   },
   "type": "module",
-  "private": true
+  "private": true,
+  "scripts": {
+    "types": "tsc lib/types/*.js --declaration --allowJs --emitDeclarationOnly --outDir lib/types/"
+  }
 }
