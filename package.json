@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
+    "rollup": "^2.38.4",
     "tmp": "^0.2.1",
     "typedoc": "^0.20.20"
   },
@@ -13,11 +14,15 @@
     "typedoc": "^0.20.20"
   },
   "exports": {
-    "./lib/types": "./lib/types/index.js"
+    "./lib/types": {
+      "import": "./lib/types/index.js",
+      "require": "./lib/types/index.cjs"
+    }
   },
   "type": "module",
   "private": true,
   "scripts": {
-    "types": "tsc lib/types/*.js --declaration --allowJs --emitDeclarationOnly --outDir lib/types/"
+    "types": "tsc lib/types/*.js --declaration --allowJs --emitDeclarationOnly --outDir lib/types/",
+    "rollup": "rollup lib/types/index.js -f cjs -o lib/types/index.cjs"
   }
 }
