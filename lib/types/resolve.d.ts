@@ -29,6 +29,9 @@ export function closest(reflection: typedocModels.Reflection | void, check: (can
  *   - hides internal __call etc types
  *   - doesn't include the module/filename
  *
+ * It's only useful for names within a specific project or module. Notably this works for Chrome
+ * and friends because they declare a new global namespace, "chrome".
+ *
  * @param {typedocModels.Reflection} reflection
  * @return {string}
  */
