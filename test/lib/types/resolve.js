@@ -16,8 +16,9 @@
 
 
 import test from 'ava';
-import {resolveLink} from '../../../lib/types/resolve.js';
+import {exportedChildren, resolveLink} from '../../../lib/types/resolve.js';
 import {parse} from './helper.js';
+import * as typedocModels from 'typedoc/dist/lib/models/index.js';
 
 
 test('resolveLink', t => {
@@ -47,4 +48,35 @@ declare namespace chrome {
   t.truthy(resolveLink(r, 'bar.barFunc.arg.x'));
   t.truthy(resolveLink(r, 'chrome.bar.barFunc.arg2'));
   t.falsy(resolveLink(r, 'bar.barFunc.arg2.x'));
+});
+
+test('exportedChildren', t => {
+  const project = parse(`
+declare namespace chrome {
+  export namespace foo {
+    export const foo = 1;
+  }
+  namespace _bar {
+    export const bar = 123;
+    function blehBarFunc(): void;
+    export {blehBarFunc as barFunc};
+  }
+  export {_bar as bar};
+  namespace ignored {
+    export const ignored = 456;
+  }
+}
+  `);
+
+  // As of Feb 2021, the way we parse a .d.ts file only gives us the exported types. If this test
+  // has broken, look at the very simple implementation of exportedChildren.
+  const children = exportedChildren(project.getChildByName('chrome'));
+  t.deepEqual(Object.keys(children), ['bar', 'foo']);
+
+  const barReflection = children['bar'];
+  t.deepEqual(
+    Object.keys(exportedChildren(barReflection, typedocModels.ReflectionKind.Function)),
+    ['barFunc'],
+    'exportedChildren should filter to mask'
+  );
 });
