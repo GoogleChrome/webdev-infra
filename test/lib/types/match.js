@@ -98,7 +98,7 @@ export function foo(b: string, c?: string): void;
 export function foo(b: string): void;
 
 export function bar(a: number, b: string): void;
-export function bar(a: string): void;
+export function bar(q: string): void;
 `);
 
   const fooReflection = project.getChildByName('foo');
