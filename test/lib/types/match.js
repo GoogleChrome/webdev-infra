@@ -19,6 +19,7 @@ import test from 'ava';
 import {parse, typeOf} from './helper.js';
 import {matchArrayType, matchEnum, matchTypeLiteral, matchUnifiedFunction, isOptional} from '../../../lib/types/match.js';
 import * as typedocModels from 'typedoc/dist/lib/models/index.js';
+import { matchOptionalType } from '../../../lib/types/match.js';
 
 
 test('array types', t => {
@@ -110,4 +111,17 @@ export function bar(a: string): void;
 
   const barReflection = project.getChildByName('bar');
   t.falsy(matchUnifiedFunction(barReflection), 'incompatible signatures should not match');
+});
+
+test('optional var', t => {
+  const project = parse(`
+export var foo: number | undefined;
+export var bar: number | null;
+`);
+
+  const fooType = typeOf(project, 'foo');
+  t.truthy(matchOptionalType(fooType), 'foo should be number');
+
+  const barType = typeOf(project, 'bar');
+  t.falsy(matchOptionalType(barType), 'bar is not optional');
 });

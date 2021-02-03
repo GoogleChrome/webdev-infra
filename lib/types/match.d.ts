@@ -88,5 +88,13 @@ export function matchUnifiedFunction(reflection?: typedocModels.Reflection | und
     }[];
     signature: typedocModels.SignatureReflection;
 };
+/**
+ * Checks if this is a union of undefined and something else, returning the other type. This is
+ * sometimes how variables are expressed as optional (as they cannot have ? applied to them).
+ *
+ * @param {typedocModels.Type} type
+ * @return {typedocModels.Type=}
+ */
+export function matchOptionalType(type: typedocModels.Type): typedocModels.Type | undefined;
 import * as typedocModels from "typedoc/dist/lib/models";
 import * as symbol from "../../types/symbol.js";
