@@ -1,0 +1,26 @@
+{
+  "name": "webdev-infra",
+  "version": "1.0.0",
+  "description": "This is a placeholder README for the webdev-infra repo, which will contain shared code for https://web.dev, https://developer.chrome.com and others.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChrome/webdev-infra.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GoogleChrome/webdev-infra/issues"
+  },
+  "homepage": "https://github.com/GoogleChrome/webdev-infra#readme",
+  "dependencies": {
+    "striptags": "^3.1.1"
+  }
+}
