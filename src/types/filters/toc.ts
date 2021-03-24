@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import * as filters from './filters';
-import * as utils from './utils';
 
-declare global {
-  module wd {
-    export type TocNodeType = filters.TocNodeType;
-    export type TODO = utils.TODO; 
-  }
+export type TocNodeType = {
+  title: string;
+  id?: string;
+  children?: TocNodeType[];
 }
-
-// empty export to keep file a module
-export {};
