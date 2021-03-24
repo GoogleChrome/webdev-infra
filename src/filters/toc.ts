@@ -85,7 +85,7 @@ const renderChildren = (toplevel: TocNodeType[]): string => {
  * @param raw inner HTML content of the page
  * @return toc contents
  */
-export const toc = (raw: string, opts: TODO): string => {
+export const toc = (raw: string, opts: wd.TODO): string => {
   // Merge user configuration into top level options.
   options = {...options, ...opts};
 
