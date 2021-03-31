@@ -2,7 +2,8 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "dist"
-  },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+    "rootDir": "src/types",
+    "outDir": "src/types",
+    "emitDeclarationOnly": true
+  }
 }

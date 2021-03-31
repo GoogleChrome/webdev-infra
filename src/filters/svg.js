@@ -25,8 +25,12 @@ let svgIndex = 0;
  * The basic issue is that SVGs use "#foo" references for clip-paths and so on,
  * however, when inlined these become global. We rewrite all IDs so they're
  * unique.
+ *
+ * @param {string} raw
+ * @param {string} className
+ * @returns {string}
  */
-export const updateSvgForInclude = (raw: string, className = ''): string => {
+const updateSvgForInclude = (raw, className = '') => {
   if (!raw) {
     return '';
   }
@@ -56,3 +60,5 @@ export const updateSvgForInclude = (raw: string, className = ''): string => {
 
   return raw;
 };
+
+module.exports = {updateSvgForInclude};
