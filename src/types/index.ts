@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/* eslint-disable @typescript-eslint/prefer-namespace-keyword, @typescript-eslint/no-namespace */
 import * as filters from './filters';
 import * as utils from './utils';
 
 declare global {
   module wd {
     export type TocNodeType = filters.TocNodeType;
-    export type TODO = utils.TODO; 
+    export type TODO = utils.TODO;
   }
 }
 

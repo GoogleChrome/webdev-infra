@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-
 export type TocNodeType = {
   title: string;
   id?: string;
   children?: TocNodeType[];
-}
+};
