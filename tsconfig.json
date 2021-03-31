@@ -1,9 +1,9 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
-    "rootDir": "src/types",
-    "outDir": "src/types",
-    "emitDeclarationOnly": true
-  }
+    "noEmit": true
+  },
+  "include": ["src/**/*"]
 }
