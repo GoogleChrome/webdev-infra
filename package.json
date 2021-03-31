@@ -2,8 +2,8 @@
   "name": "webdev-infra",
   "version": "1.0.2",
   "description": "This is a placeholder README for the webdev-infra repo, which will contain shared code for https://web.dev, https://developer.chrome.com and others.",
-  "main": "src/index.js",
-  "typings": "src/types/index.d.ts",
+  "main": "index.js",
+  "typings": "types/index.d.ts",
   "engines": {
     "node": "14.x"
   },

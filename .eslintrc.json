@@ -2,7 +2,7 @@
   "extends": "./node_modules/gts/",
   "overrides": [
     {
-      "files": ["src/**/*.js"],
+      "files": ["**/*.js"],
       "parser": "@babel/eslint-parser",
       "parserOptions": {
         "requireConfigFile": false
