@@ -28,7 +28,7 @@ let svgIndex = 0;
  *
  * @param {string} raw
  * @param {string} className
- * @return {string}
+ * @returns {string}
  */
 const updateSvgForInclude = (raw, className = '') => {
   if (!raw) {
