@@ -3,7 +3,8 @@
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": ".",
+    "checkJs": true,
     "noEmit": true
   },
-  "include": ["index.js", "types", "filters"]
+  "include": ["**/*"]
 }

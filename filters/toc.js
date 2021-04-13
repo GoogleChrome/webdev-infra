@@ -87,7 +87,7 @@ const renderChildren = toplevel => {
 /**
  * @param {string} raw inner HTML content of the page
  * @param {wd.TODO} opts
- * @return {string} toc contents
+ * @returns {string} toc contents
  */
 const toc = (raw, opts) => {
   // Merge user configuration into top level options.
@@ -121,7 +121,9 @@ const toc = (raw, opts) => {
       current = {title: contents, id, children: []};
       toplevel.push(current);
     } else if (htype === 'h3' && id) {
-      // Only push h3's if they have an ID.
+      // Only push h3's if they have an ID. Also ignore below cause tsc gets confused
+      // because current doesn't have any value set above.
+      // @ts-ignore
       current?.children?.push({title: contents, id});
     }
   }
