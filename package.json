@@ -16,10 +16,7 @@
     "lint:types": "tsc --noEmit",
     "lint": "npm-run-all lint:js lint:types"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GoogleChrome/webdev-infra.git"
-  },
+  "repository": "GoogleChrome/webdev-infra",
   "keywords": [],
   "author": "",
   "license": "ISC",
