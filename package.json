@@ -1,7 +1,7 @@
 {
   "name": "webdev-infra",
   "version": "1.0.4",
-  "description": "This is a placeholder README for the webdev-infra repo, which will contain shared code for https://web.dev, https://developer.chrome.com and others.",
+  "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
   "typings": "types/index.d.ts",
   "engines": {
@@ -17,9 +17,7 @@
     "lint": "npm-run-all lint:js lint:types"
   },
   "repository": "GoogleChrome/webdev-infra",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChrome/webdev-infra/issues"
   },
