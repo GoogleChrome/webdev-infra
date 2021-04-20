@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-export type TODO = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+/**
+ * @param {string} src
+ * @param {wd.TODOObject} [params]
+ * @returns {boolean}
+ */
+const isSimpleImg = (src, params = {}) => /\.svg$/.test(src) && !params.fm;
 
-export type TODOObject = {[key: string]: TODO};
+module.exports = {isSimpleImg};
