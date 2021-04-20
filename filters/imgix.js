@@ -23,20 +23,29 @@ const DEFAULT_PARAMS = {auto: 'format'};
  * Generates src URL of image from imgix path or URL.
  *
  * @param {string} domain imgix domain
- * @param {string} src Path (or URL) for image.
- * @param {Object} [params] Imgix API params.
- * @return {string}
+ * @return {(src: string, params?: wd.TODOObject) => string} Video shortcode.
  */
-const imgix = (domain, src, params = {}) => {
+const imgix = domain => {
   const client = new ImgixClient({domain, includeLibraryParam: false});
 
-  params = {...DEFAULT_PARAMS, ...params};
+  /**
+   * Generates src URL of image from imgix path or URL.
+   *
+   * @param {string} src Path (or URL) for image.
+   * @param {wd.TODOObject} [params] Imgix API params.
+   * @return {string}
+   */
+  const returnedFunction = (src, params = {}) => {
+    params = {...DEFAULT_PARAMS, ...params};
 
-  // Check if image is an SVG, if it is we don't need or want to process it
-  // If we do imgix will rasterize the image.
-  const doNotUseParams = isSimpleImg(src, params);
+    // Check if image is an SVG, if it is we don't need or want to process it
+    // If we do imgix will rasterize the image, which causes issues with a number of devtools images.
+    const doNotUseParams = isSimpleImg(src, params);
 
-  return client.buildURL(src, doNotUseParams ? {} : params);
+    return client.buildURL(src, doNotUseParams ? {} : params);
+  };
+
+  return returnedFunction;
 };
 
 module.exports = {imgix};
