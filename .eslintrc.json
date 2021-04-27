@@ -9,7 +9,7 @@
       }
     },
     {
-      "files": ["components/**/*.js"],
+      "files": ["web-components/**/*.js"],
       "rules": {
         "no-unsupported-features/es-syntax": false
       }

@@ -19,8 +19,8 @@ const {html} = require('common-tags');
 /**
  * A YouTube video embed.
  *
- * Be sure to import custom element from `components/YouTube.js`
- * in order to use this shortcode/
+ * Be sure to import custom element from `web-components/YouTube.js`
+ * in order to use this shortcode.
  *
  * @param {string|wd.YouTubeArgs} args
  * @return {string}
