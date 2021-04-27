@@ -28,6 +28,7 @@ declare global {
     export type TODO = utils.TODO;
     export type TODOObject = utils.TODOObject;
     export type VideoArgs = shortcodes.VideoArgs;
+    export type YouTubeArgs = shortcodes.YouTubeArgs;
   }
 }
 
