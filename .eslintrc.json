@@ -7,6 +7,12 @@
       "parserOptions": {
         "requireConfigFile": false
       }
+    },
+    {
+      "files": ["web-components/**/*.js"],
+      "rules": {
+        "no-unsupported-features/es-syntax": false
+      }
     }
   ]
 }
