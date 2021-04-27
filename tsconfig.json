@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "checkJs": true,
     "noEmit": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "skipLibCheck": true
   },
   "include": ["**/*"]
 }

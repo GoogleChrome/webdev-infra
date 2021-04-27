@@ -10,8 +10,11 @@
     },
     {
       "files": ["web-components/**/*.js"],
+      "parserOptions": {
+        "sourceType": "module"
+      },
       "rules": {
-        "no-unsupported-features/es-syntax": false
+        "node/no-unsupported-features/es-syntax": 0
       }
     }
   ]
