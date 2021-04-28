@@ -56,6 +56,10 @@ export type VideoArgs = {
    */
   muted?: boolean;
   /**
+   * A Boolean attribute indicating that the video is to be played "inline", that is within the element's playback area. Note that the absence of this attribute does not imply that the video will always be played in fullscreen.
+   */
+  playsinline?: boolean;
+  /**
    * Pathname of image hosted by imgix to be shown while the video is downloading.
    */
   poster?: string;

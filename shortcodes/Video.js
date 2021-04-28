@@ -71,6 +71,7 @@ const Video = function (bucket, domain) {
       loop,
       linkTo,
       muted,
+      playsinline,
       poster,
       preload,
       src,
@@ -78,7 +79,7 @@ const Video = function (bucket, domain) {
     } = args;
 
     let videoTag = html`<video
-      ${autoplay ? 'autoplay playsinline' : ''}
+      ${autoplay ? 'autoplay' : ''}
       ${autoPictureInPicture ? 'autoPictureInPicture' : ''}
       ${className ? `class="${className}"` : ''}
       ${controls ? 'controls' : ''}
@@ -87,6 +88,7 @@ const Video = function (bucket, domain) {
       ${id ? `id="${id}"` : ''}
       ${loop ? 'loop' : ''}
       ${muted ? 'muted' : ''}
+      ${playsinline ? 'playsinline' : ''}
       ${poster ? `poster="${imgix(domain)(poster)}"` : ''}
       ${preload ? `preload="${preload}"` : ''}
       ${width ? `width="${width}"` : ''}
