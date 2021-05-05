@@ -30,15 +30,27 @@ let svgIndex = 0;
  * @param {string} className
  * @returns {string}
  */
-const updateSvgForInclude = (raw, className = '') => {
+const updateSvgForInclude = (raw, options = {label: '', hidden: false, className: ''}) => {
   if (!raw) {
     return '';
+  }
+
+  let {label, hidden, className} = options;
+
+  if (hidden) {
+    raw = raw.replace('<svg', `<svg aria-hidden="true"`);
+  } else if (label) {
+    raw = raw.replace('<svg', `<svg role="img" aria-label="${label}"`)
+  } else {
+    throw new Error(`SVGs must provide a label or set hidden to true.
+    If you're using icon() or svg() you may have forgotten the label argument.
+    A good label should be action focused: e.g. "Search" instead of "Magnifying glass".
+    ${raw}`);
   }
 
   const localIndex = ++svgIndex;
   const suffix = '_' + localIndex.toString(36);
 
-  className = (className || '').trim();
   if (className) {
     raw = raw.replace('<svg', `<svg class="${className}"`);
   }
