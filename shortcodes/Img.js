@@ -69,7 +69,7 @@ function Img(domain) {
       width,
       params,
     } = args;
-    let {lazy, sizes, options} = args;
+    let {decoding, loading, sizes, options} = args;
 
     const checkHereIfError = `ERROR IN ${
       // @ts-ignore: `this` has type of `any`
@@ -102,8 +102,12 @@ function Img(domain) {
     }
     const widthAsNumber = parseInt(width, 10);
 
-    if (lazy === undefined) {
-      lazy = true;
+    if (decoding === undefined) {
+      decoding = 'async';
+    }
+
+    if (loading === undefined) {
+      loading = 'lazy';
     }
 
     const doNotUseSrcset = isSimpleImg(src, params);
@@ -134,9 +138,10 @@ function Img(domain) {
     let imgTag = html` <img
       ${hasValidAlt ? `alt="${safeHtml`${alt}`}"` : ''}
       ${className ? `class="${className}"` : ''}
+      ${decoding ? `decoding="${decoding}"` : ''}
       height="${heightAsNumber}"
       ${id ? `id="${id}"` : ''}
-      ${lazy ? 'loading="lazy"' : ''}
+      ${loading ? `loading="${loading}"` : ''}
       ${doNotUseSrcset ? '' : `sizes="${sizes}"`}
       src="${fullSrc}"
       ${doNotUseSrcset ? '' : `srcset="${srcset}"`}
