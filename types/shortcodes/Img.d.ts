@@ -26,6 +26,10 @@ export type ImgArgs = {
    */
   class?: string;
   /**
+   * Provides an image decoding hint to the browser. `'async'` by default.
+   */
+  decoding?: 'sync' | 'async' | 'auto';
+  /**
    * The intrinsic height of the image, in pixels. Must be an integer without a unit.
    */
   height: string;
@@ -34,13 +38,13 @@ export type ImgArgs = {
    */
   id?: string;
   /**
-   * Flag to dictate if loading of image is deffered until it reaches a calulated distance from the viewport. `true` by default.
-   */
-  lazy?: boolean;
-  /**
    * Flag to wrap image in `a` tag pointing to the image. `false` by default.
    */
   linkTo?: boolean;
+  /**
+   * Indicates how the browser should load the image. `'lazy'` by default.
+   */
+  loading?: 'eager' | 'lazy';
   /**
    * One or more strings separated by commas, indicating a set of source sizes. If value is not provided one is generated dynamically.
    */
