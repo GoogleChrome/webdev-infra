@@ -37,7 +37,7 @@ const IS_UPLOADED_IMG = src => {
   if (extname.length === 0 && extname === '.') {
     return false;
   }
-  return /^image\/[A-Za-z0-9]*\/[A-Za-z0-9]*\.(gif|jpe?g|tiff?|png|webp|bmp|svg|ico)$/.test(
+  return /^image\/[A-Za-z0-9]*\/[A-Za-z0-9-_]*\.(gif|jpe?g|tiff?|png|webp|bmp|svg|ico)$/.test(
     src.toLowerCase()
   );
 };
