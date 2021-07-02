@@ -29,7 +29,10 @@ const GCS_URL = 'https://storage.googleapis.com';
  */
 const generateSource = (bucket, src) => {
   const extname = path.extname(src);
-  const type = mime(extname);
+  let type = mime(extname);
+  if (type === 'video/quicktime') {
+    type = 'video/mp4';
+  }
   src = new url.URL(path.join(bucket, src), GCS_URL).href;
   return html`
     <source src="${src}" ${type ? `type="${type}"` : ''} />
