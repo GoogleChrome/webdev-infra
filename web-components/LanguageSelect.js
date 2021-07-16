@@ -58,12 +58,19 @@ export class LanguageSelect extends BaseElement {
     };
   }
 
+  constructor() {
+    super();
+    this.supported = Object.keys(languageNames).join(',') || '';
+    this.supportedLanguages = [];
+  }
+
   onChange() {
     // To be optionally implemented by an inheriting class.
   }
 
   connectedCallback() {
     super.connectedCallback();
+    /* eslint-disable no-undef */
     this.current = document.documentElement.lang;
     this.supportedLanguages = this.supported.split(',');
   }
@@ -87,21 +94,23 @@ export class LanguageSelect extends BaseElement {
 
   render() {
     const languageVersions = Array.from(
-      document.querySelectorAll('link[rel="alternate"]'),
+      /* eslint-disable no-undef */
+      document.querySelectorAll('link[rel="alternate"]')
     )
-      .filter((link) => link['hreflang'])
-      .map((link) => link['hreflang']);
+      .filter(link => link['hreflang'])
+      .map(link => link['hreflang']);
+    /* eslint-disable no-undef */
     const currentLang = document.documentElement.lang;
-    const langList = this.supportedLanguages.filter((language) =>
-      languageVersions.includes(language) || language === currentLang,
-    );
+    const langList = this.supportedLanguages.filter(language => {
+      return languageVersions.includes(language) || language === currentLang;
+    });
     return html`
       <div class="language-select">
         <label class="w-visually-hidden" for="preferred-language">
           Choose language
         </label>
         <select id="preferred-language" @change="${this.onChange}">
-          ${langList.map((language) => this.renderOption(language))}
+          ${langList.map(language => this.renderOption(language))}
         </select>
       </div>
     `;
