@@ -6,7 +6,8 @@
     "checkJs": true,
     "noEmit": true,
     "noImplicitAny": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": ["es2018", "DOM"],
   },
   "include": ["**/*"]
 }
