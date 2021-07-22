@@ -23,7 +23,7 @@ const DEFAULT_PARAMS = {auto: 'format'};
  * Generates src URL of image from imgix path or URL.
  *
  * @param {string} domain imgix domain
- * @return {(src: string, params?: wd.TODOObject) => string} Video shortcode.
+ * @return {(src: string, params?: import('types').TODOObject) => string} Video shortcode.
  */
 const imgix = domain => {
   const client = new ImgixClient({domain, includeLibraryParam: false});
@@ -32,7 +32,7 @@ const imgix = domain => {
    * Generates src URL of image from imgix path or URL.
    *
    * @param {string} src Path (or URL) for image.
-   * @param {wd.TODOObject} [params] Imgix API params.
+   * @param {import('types').TODOObject} [params] Imgix API params.
    * @return {string}
    */
   const returnedFunction = (src, params = {}) => {

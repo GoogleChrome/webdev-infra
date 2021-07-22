@@ -22,7 +22,7 @@ const {html} = require('common-tags');
  * Be sure to import custom element from `web-components/YouTube.js`
  * in order to use this shortcode.
  *
- * @param {string|wd.YouTubeArgs} args
+ * @param {string|import('types').YouTubeArgs} args
  * @return {string}
  */
 const YouTube = args => {

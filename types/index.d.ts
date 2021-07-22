@@ -13,24 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// We want to use a module to make it global, so we'll suppress this warning.
-/* eslint-disable @typescript-eslint/prefer-namespace-keyword */
 import * as filters from './filters';
 import * as shortcodes from './shortcodes';
 import * as utils from './utils';
 
-declare global {
-  module wd {
-    export type ImgArgs = shortcodes.ImgArgs;
-    export type ImgixOptions = shortcodes.ImgixOptions;
-    export type TocNodeType = filters.TocNodeType;
-    export type TODO = utils.TODO;
-    export type TODOObject = utils.TODOObject;
-    export type VideoArgs = shortcodes.VideoArgs;
-    export type YouTubeArgs = shortcodes.YouTubeArgs;
-  }
-}
-
-// empty export to keep file a module
-export {};
+export type ImgArgs = shortcodes.ImgArgs;
+export type ImgixOptions = shortcodes.ImgixOptions;
+export type TocNodeType = filters.TocNodeType;
+export type TODO = utils.TODO;
+export type TODOObject = utils.TODOObject;
+export type VideoArgs = shortcodes.VideoArgs;
+export type YouTubeArgs = shortcodes.YouTubeArgs;

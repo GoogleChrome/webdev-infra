@@ -16,7 +16,7 @@
 
 /**
  * @param {string} src
- * @param {wd.TODOObject} [params]
+ * @param {import('types').TODOObject} [params]
  * @returns {boolean}
  */
 const isSimpleImg = (src, params = {}) => /\.svg$/.test(src) && !params.fm;
