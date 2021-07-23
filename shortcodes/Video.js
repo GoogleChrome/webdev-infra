@@ -42,11 +42,11 @@ const generateSource = (bucket, src) => {
 /**
  * @param {string} bucket GCP nucket name
  * @param {string} domain imgix domain
- * @returns {(args: wd.VideoArgs) => string} Video shortcode.
+ * @returns {(args: import('types').VideoArgs) => string} Video shortcode.
  */
 const Video = function (bucket, domain) {
   /**
-   * @param {wd.VideoArgs} args Named arguments
+   * @param {import('types').VideoArgs} args Named arguments
    * @returns {string}
    */
   const returnedFunction = function (args) {

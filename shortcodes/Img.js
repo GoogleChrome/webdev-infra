@@ -46,7 +46,7 @@ const IS_UPLOADED_IMG = src => {
  * Takes an imgix url or path and generates an `<img>` element with `srcset`.
  *
  * @param {string} domain imgix domain
- * @return {(args: wd.ImgArgs) => string} Img shortcode
+ * @return {(args: import('types').ImgArgs) => string} Img shortcode
  */
 function Img(domain) {
   const client = new ImgixClient({domain, includeLibraryParam: false});
@@ -54,7 +54,7 @@ function Img(domain) {
   /**
    * Takes an imgix url or path and generates an `<img>` element with `srcset`.
    *
-   * @param {wd.ImgArgs} args Named arguments
+   * @param {import('types').ImgArgs} args Named arguments
    * @return {string}
    */
   const returnedFunction = function (args) {

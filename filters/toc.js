@@ -54,7 +54,7 @@ let options = {
 
 /**
  *
- * @param {wd.TocNodeType} node
+ * @param {import('types').TocNodeType} node
  * @returns {string}
  */
 const renderNode = node => {
@@ -75,7 +75,7 @@ const renderNode = node => {
 };
 
 /**
- * @param {wd.TocNodeType[]} toplevel
+ * @param {import('types').TocNodeType[]} toplevel
  * @returns {string}
  */
 const renderChildren = toplevel => {
@@ -86,17 +86,17 @@ const renderChildren = toplevel => {
 
 /**
  * @param {string} raw inner HTML content of the page
- * @param {wd.TODO} opts
+ * @param {import('types').TODO} opts
  * @returns {string} toc contents
  */
 const toc = (raw, opts) => {
   // Merge user configuration into top level options.
   options = {...options, ...opts};
 
-  /** @typedef {wd.TocNodeType[]} */
+  /** @typedef {import('types').TocNodeType[]} */
   let toplevel = [];
 
-  /** @typedef {wd.TocNodeType | null} */
+  /** @typedef {import('types').TocNodeType | null} */
   let current = null;
 
   for (;;) {

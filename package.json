@@ -3,7 +3,6 @@
   "version": "1.0.21",
   "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
-  "typings": "types/index.d.ts",
   "engines": {
     "node": "14.x"
   },
