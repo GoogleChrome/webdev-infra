@@ -90,7 +90,7 @@ const Video = function (bucket, domain) {
       ${height ? `height="${height}"` : ''}
       ${id ? `id="${id}"` : ''}
       ${loop ? 'loop' : ''}
-      ${muted ? 'muted' : ''}
+      ${muted || autoplay ? 'muted' : ''}
       ${playsinline ? 'playsinline' : ''}
       ${poster ? `poster="${imgix(domain)(poster)}"` : ''}
       ${preload ? `preload="${preload}"` : ''}

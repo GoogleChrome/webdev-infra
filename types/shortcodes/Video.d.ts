@@ -53,6 +53,7 @@ export type VideoArgs = {
   linkTo?: boolean;
   /**
    * A Boolean attribute that indicates the default setting of the audio contained in the video.
+   * Defgaults to true if `autoplay` is enabled.
    */
   muted?: boolean;
   /**
