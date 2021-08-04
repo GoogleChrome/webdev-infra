@@ -68,7 +68,7 @@ function Img(domain) {
       style,
       width,
       params,
-    } = args;
+    } = {params: {}, ...args};
     let {decoding, loading, sizes, options} = args;
 
     const checkHereIfError = `ERROR IN ${
@@ -110,7 +110,19 @@ function Img(domain) {
       loading = 'lazy';
     }
 
-    const doNotUseSrcset = isSimpleImg(src, params);
+    // Determine if this is a SVG or something that already has an explicit format set. If so, we
+    // don't try to resize or format it in any way.
+    const simpleImg = isSimpleImg(src, params);
+    const useSrcSet = !simpleImg;
+
+    // If auto isn't already set then force "auto=format". This gives us back the best format for
+    // the browser: https://docs.imgix.com/apis/rendering/auto/auto#format
+    // This is also set in the imgix source URL filter, but we have to set it here so that imgix's
+    // code for generating a srcset accepts it too. (We can't pass `fullSrc` as returned by the
+    // imgix source URL below, because then imgix's srcset code tries serve a doubly-wrapped URL.)
+    if (!params.auto && !simpleImg) {
+      params.auto = 'format';
+    }
 
     // https://github.com/imgix/imgix-core-js#imgixclientbuildsrcsetpath-params-options
     options = {
@@ -122,8 +134,6 @@ function Img(domain) {
       widthTolerance: 0.07,
       ...options,
     };
-    // https://docs.imgix.com/apis/rendering
-    const fullSrc = imgix(domain)(src, params);
     const srcset = client.buildSrcSet(src, params, options);
     if (sizes === undefined) {
       if (widthAsNumber >= MAX_WIDTH) {
@@ -135,6 +145,9 @@ function Img(domain) {
 
     const hasValidAlt = alt !== undefined;
 
+    // https://docs.imgix.com/apis/rendering
+    const fullSrc = imgix(domain)(src, params);
+
     let imgTag = html` <img
       ${hasValidAlt ? `alt="${safeHtml`${alt}`}"` : ''}
       ${className ? `class="${className}"` : ''}
@@ -142,9 +155,9 @@ function Img(domain) {
       height="${heightAsNumber}"
       ${id ? `id="${id}"` : ''}
       ${loading ? `loading="${loading}"` : ''}
-      ${doNotUseSrcset ? '' : `sizes="${sizes}"`}
+      ${useSrcSet ? `sizes="${sizes}"` : ''}
       src="${fullSrc}"
-      ${doNotUseSrcset ? '' : `srcset="${srcset}"`}
+      ${useSrcSet ? `srcset="${srcset}"` : ''}
       ${style ? `style="${style}"` : ''}
       width="${widthAsNumber}"
     />`;

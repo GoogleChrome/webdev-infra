@@ -61,7 +61,13 @@ export type ImgArgs = {
    * The intrinsic width of the image in pixels. Must be an integer without a unit.
    */
   width: string;
+  /**
+   * Params directly passed to the imgix API. This can be used to make specific overrides, use with caution.
+   */
   params?: TODOObject;
+  /**
+   * Options passed when generating an imgix srcset.
+   */
   options?: ImgixOptions;
 };
 

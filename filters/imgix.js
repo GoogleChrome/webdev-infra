@@ -23,7 +23,7 @@ const DEFAULT_PARAMS = {auto: 'format'};
  * Generates src URL of image from imgix path or URL.
  *
  * @param {string} domain imgix domain
- * @return {(src: string, params?: import('types').TODOObject) => string} Video shortcode.
+ * @return {(src: string, params?: import('types').TODOObject) => string} Helper to generate URLs.
  */
 const imgix = domain => {
   const client = new ImgixClient({domain, includeLibraryParam: false});
@@ -38,8 +38,9 @@ const imgix = domain => {
   const returnedFunction = (src, params = {}) => {
     params = {...DEFAULT_PARAMS, ...params};
 
-    // Check if image is an SVG, if it is we don't need or want to process it
-    // If we do imgix will rasterize the image, which causes issues with a number of devtools images.
+    // Check if image is an SVG or has an explicit format set already, if it is we don't need or
+    // want to process it. If we do, imgix will rasterize the image, which causes issues with a
+    // number of devtools images.
     const doNotUseParams = isSimpleImg(src, params);
 
     return client.buildURL(src, doNotUseParams ? {} : params);
