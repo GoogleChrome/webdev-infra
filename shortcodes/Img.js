@@ -118,7 +118,8 @@ function Img(domain) {
     // If auto isn't already set then force "auto=format". This gives us back the best format for
     // the browser: https://docs.imgix.com/apis/rendering/auto/auto#format
     // This is also set in the imgix source URL filter, but we have to set it here so that imgix's
-    // code for generating a srcset accepts it too.
+    // code for generating a srcset accepts it too. (We can't pass `fullSrc` below, because then
+    // imgix's client tries to serve us a doubly-wrapped image URL.)
     if (!params.auto && !simpleImg) {
       params.auto = 'format';
     }
@@ -135,7 +136,7 @@ function Img(domain) {
     };
     // https://docs.imgix.com/apis/rendering
     const fullSrc = imgix(domain)(src, params);
-    const srcset = client.buildSrcSet(src, params, options);
+    const srcset = client.buildSrcSet(fullSrc, params, options);
     if (sizes === undefined) {
       if (widthAsNumber >= MAX_WIDTH) {
         sizes = `(min-width: ${MAX_WIDTH}px) ${MAX_WIDTH}px, calc(100vw - 48px)`;
