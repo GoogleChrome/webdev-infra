@@ -33,7 +33,7 @@
  * </web-tabs>
  */
 
- import {BaseElement} from './base-element';
+ import {BaseElement} from './BaseElement';
  import {html} from 'lit-element';
  import {generateIdSalt} from '../utils/salt';
 
