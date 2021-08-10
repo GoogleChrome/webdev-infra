@@ -5,17 +5,13 @@
       "files": ["**/*.js"],
       "parser": "@babel/eslint-parser",
       "parserOptions": {
-        "requireConfigFile": false
-      }
-    },
-    {
-      "files": ["web-components/**/*.js"],
-      "parserOptions": {
+        "requireConfigFile": false,
+        "ecmaVersion": 2018,
         "sourceType": "module"
-      },
-      "rules": {
-        "node/no-unsupported-features/es-syntax": 0
       }
     }
-  ]
+  ],
+  "rules": {
+    "node/no-unsupported-features/es-syntax": 0
+  }
 }
