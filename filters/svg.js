@@ -27,18 +27,15 @@ let svgIndex = 0;
  * unique.
  *
  * @param {string} raw
- * @param {{ label?: string, hidden?: boolean, className?: string }} options
+ * @param {{ label?: string, hidden?: boolean, className?: string, id?: string }} options
  * @returns {string}
  */
-const updateSvgForInclude = (
-  raw,
-  options = {label: '', hidden: false, className: ''}
-) => {
+const updateSvgForInclude = (raw, options = {}) => {
   if (!raw) {
     return '';
   }
 
-  const {label, hidden, className} = options;
+  const {label, hidden, className, id} = options;
 
   if (hidden) {
     raw = raw.replace('<svg', '<svg aria-hidden="true"');
@@ -72,6 +69,12 @@ const updateSvgForInclude = (
   raw = raw.replace(/\burl\(#(.+?)\)/g, (_, id) => {
     return `url(#${id}${suffix})`;
   });
+
+  // Gives the SVG itself a valid ID. We do this last so that it's not made unique above.
+  // Earlier IDs win over later ones, so if the raw file had another ID, it's ignored now.
+  if (id) {
+    raw = raw.replace('<svg', `<svg id="${id}"`);
+  }
 
   return raw;
 };
