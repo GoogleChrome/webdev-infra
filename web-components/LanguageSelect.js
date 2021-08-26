@@ -45,7 +45,7 @@ const languageNames = {
   es: 'Español',
   ko: '한국어',
   zh: 'Chinese',
-  ru: 'Rусский',
+  ru: 'Pусский',
   pt: 'Português',
   ja: '日本語',
 };
