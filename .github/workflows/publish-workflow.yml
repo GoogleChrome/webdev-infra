@@ -15,4 +15,5 @@ jobs:
       - run: npm run lint
       - uses: JS-DevTools/npm-publish@v1
         with:
-          token: ${{ secrets.NPM_TOKEN }}
+          token: ${{ secrets.WOMBOT_TOKEN }}
+          registry: https://wombat-dressing-room.appspot.com
