@@ -15,5 +15,6 @@ jobs:
       - run: npm run lint
       - uses: JS-DevTools/npm-publish@v1
         with:
+          # This is from Google-internal go/wombot.
           token: ${{ secrets.WOMBOT_TOKEN }}
           registry: https://wombat-dressing-room.appspot.com
