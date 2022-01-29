@@ -20,6 +20,7 @@ import * as utils from './utils';
 export type ImgArgs = shortcodes.ImgArgs;
 export type ImgixOptions = shortcodes.ImgixOptions;
 export type TocNodeType = filters.TocNodeType;
+export type TocOptions = filters.TocOptions;
 export type TODO = utils.TODO;
 export type TODOObject = utils.TODOObject;
 export type VideoArgs = shortcodes.VideoArgs;

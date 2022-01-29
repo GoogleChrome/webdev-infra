@@ -45,6 +45,7 @@ const trailingHashRe = /\s+#$/;
 
 // An options object which provides some defaults but can be overriden
 // by user provided values.
+/** @typedef {import('types').TocOptions} */
 let options = {
   listClass: 'toc__list',
   listItemClass: 'toc__listitem',
@@ -85,11 +86,13 @@ const renderChildren = toplevel => {
 };
 
 /**
+ * Creates a `ul` with `h2`'s and `h3`'s with id's
+ *
  * @param {string} raw inner HTML content of the page
- * @param {import('types').TODO} opts
+ * @param {import('types').TocOptions} [opts]
  * @returns {string} toc contents
  */
-const toc = (raw, opts) => {
+const toc = (raw, opts = {}) => {
   // Merge user configuration into top level options.
   options = {...options, ...opts};
 
@@ -99,6 +102,7 @@ const toc = (raw, opts) => {
   /** @typedef {import('types').TocNodeType | null} */
   let current = null;
 
+  // Infinite loop until break
   for (;;) {
     const headingMatch = headingRe.exec(raw);
     if (!headingMatch) {
@@ -139,4 +143,4 @@ const toc = (raw, opts) => {
   return renderChildren(toplevel);
 };
 
-module.exports = {toc};
+module.exports = {renderNode, renderChildren, toc};

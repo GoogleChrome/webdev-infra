@@ -1,5 +1,8 @@
 {
   "extends": "./node_modules/gts/",
+  "rules": {
+    "node/no-unsupported-features/es-syntax": 0
+  },
   "overrides": [
     {
       "files": ["**/*.js"],
@@ -9,9 +12,12 @@
         "ecmaVersion": 2018,
         "sourceType": "module"
       }
+    },
+    {
+      "files": ["test/**/*.ts"],
+      "rules": {
+        "node/no-unpublished-import": 0
+      }
     }
-  ],
-  "rules": {
-    "node/no-unsupported-features/es-syntax": 0
-  }
+  ]
 }

@@ -19,3 +19,10 @@ export type TocNodeType = {
   id?: string;
   children?: TocNodeType[];
 };
+
+export type TocOptions = {
+  listClass?: string;
+  listItemClass?: string;
+  anchorClass?: string;
+  spanClass?: string;
+};
