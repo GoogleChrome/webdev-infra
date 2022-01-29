@@ -13,7 +13,7 @@ const titles: string[] = [
   'The Prince and the Pauper',
 ];
 
-describe('filters/ toc.js Tests:', () => {
+describe('filters/toc.js Tests:', () => {
   describe('renderNode() Tests:', () => {
     it('renderNode() creates `li` with `span` of just the title', () => {
       const title = titles[2];
