@@ -142,7 +142,7 @@ describe('filters/toc.js Tests:', () => {
     });
 
     it("toc() ignores all headers without id's", () => {
-      // Only the last element will be an h2
+      // Every other element will have an id
       const sample = toc(
         titles
           .map(
@@ -172,7 +172,7 @@ describe('filters/toc.js Tests:', () => {
     });
 
     it("toc() puts h3's as children of h2's", () => {
-      // Only the last element will be an h2
+      // First element is an h2 all others are h3's
       const headers = [
         `<h2 id="${titles[0]}">${titles[0]}</h2>`,
         ...titles.map(title => `<h3 id="${title}">${title}</h3>`),
