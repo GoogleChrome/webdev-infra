@@ -70,6 +70,7 @@ function Img(domain) {
       params,
     } = {params: {}, ...args};
     let {decoding, loading, sizes, options} = args;
+    const {importance} = args;
 
     const checkHereIfError = `ERROR IN ${
       // @ts-ignore: `this` has type of `any`
@@ -102,12 +103,15 @@ function Img(domain) {
     }
     const widthAsNumber = parseInt(width, 10);
 
-    if (decoding === undefined) {
-      decoding = 'async';
-    }
+    // Default to lazy loading and async decode for most images.
+    if (importance === 'high') {
+      if (decoding === undefined) {
+        decoding = 'async';
+      }
 
-    if (loading === undefined) {
-      loading = 'lazy';
+      if (loading === undefined) {
+        loading = 'lazy';
+      }
     }
 
     // Determine if this is a SVG or something that already has an explicit format set. If so, we
@@ -151,6 +155,7 @@ function Img(domain) {
     let imgTag = html` <img
       ${hasValidAlt ? `alt="${safeHtml`${alt}`}"` : ''}
       ${className ? `class="${className}"` : ''}
+      ${importance ? `importance="${importance}"` : ''}
       ${decoding ? `decoding="${decoding}"` : ''}
       height="${heightAsNumber}"
       ${id ? `id="${id}"` : ''}
