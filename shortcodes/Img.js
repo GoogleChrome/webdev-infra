@@ -103,8 +103,9 @@ function Img(domain) {
     }
     const widthAsNumber = parseInt(width, 10);
 
-    // Default to lazy loading and async decode for most images.
-    if (importance === 'high') {
+    // Default to lazy loading and async decode for any image that doesn't
+    // have its `importance` attribute set to `'high'`.
+    if (importance !== 'high') {
       if (decoding === undefined) {
         decoding = 'async';
       }
