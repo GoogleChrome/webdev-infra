@@ -4,7 +4,7 @@
   "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
   "engines": {
-    "node": "14.x"
+    "node": ">=14"
   },
   "directories": {
     "doc": "docs"
