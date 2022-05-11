@@ -31,6 +31,10 @@ export type ImgArgs = {
    */
   decoding?: 'sync' | 'async' | 'auto';
   /**
+   * Indicates the relative priority of resources to the browser.
+   */
+  fetchpriority?: 'high' | 'low' | 'auto';
+  /**
    * The intrinsic height of the image, in pixels. Must be an integer without a unit.
    */
   height: string;
@@ -38,10 +42,6 @@ export type ImgArgs = {
    * Often used with CSS to style a specific element. The value of this attribute must be unique.
    */
   id?: string;
-  /**
-   * Indicates the relative importance of resources to the browser.
-   */
-  importance?: 'high' | 'low' | 'auto';
   /**
    * Flag to wrap image in `a` tag pointing to the image. `false` by default.
    */

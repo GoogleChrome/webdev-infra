@@ -70,8 +70,8 @@ function Img(domain) {
       params,
     } = {params: {}, ...args};
     let {decoding, loading, sizes, options} = args;
-    const {importance} = args;
 
+    const {fetchpriority} = args;
     const checkHereIfError = `ERROR IN ${
       // @ts-ignore: `this` has type of `any`
       this.page ? this.page.inputPath : 'UNKNOWN'
@@ -156,8 +156,8 @@ function Img(domain) {
     let imgTag = html` <img
       ${hasValidAlt ? `alt="${safeHtml`${alt}`}"` : ''}
       ${className ? `class="${className}"` : ''}
-      ${importance ? `importance="${importance}"` : ''}
       ${decoding ? `decoding="${decoding}"` : ''}
+      ${fetchpriority ? `fetchpriority="${fetchpriority}"` : ''}
       height="${heightAsNumber}"
       ${id ? `id="${id}"` : ''}
       ${loading ? `loading="${loading}"` : ''}
