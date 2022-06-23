@@ -30,6 +30,9 @@
  * @return {EleventyCollectionItemPartial}
  */
 const markFuturePostAsDraft = (item, currentTimeInMS) => {
+  // If item.date isn't valid (e.g. 11ty used undefined to initialize it),
+  // getTime() will return NaN. This will lead the following if statement to
+  // evaluate to false, giving us the behavior we want.
   if (item.date.getTime() > currentTimeInMS) {
     console.log(
       `${item.url} has a future publication date of ` +
