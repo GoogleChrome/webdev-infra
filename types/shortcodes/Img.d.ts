@@ -27,7 +27,7 @@ export type ImgArgs = {
   class?: string;
   /**
    * Provides an image decoding hint to the browser. `'async'` by default
-   * for images that are not `'high'` importance.
+   * for images that are not `'high'` fetchpriority.
    */
   decoding?: 'sync' | 'async' | 'auto';
   /**
@@ -48,7 +48,7 @@ export type ImgArgs = {
   linkTo?: boolean;
   /**
    * Indicates how the browser should load the image. `'lazy'` by default
-   * for images that are not `'high'` importance.
+   * for images that are not `'high'` fetchpriority.
    */
   loading?: 'eager' | 'lazy';
   /**
