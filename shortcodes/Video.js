@@ -95,6 +95,16 @@ const Video = function (bucket, domain) {
       ${poster ? `poster="${imgix(domain)(poster)}"` : ''}
       ${preload ? `preload="${preload}"` : ''}
       ${width ? `width="${width}"` : ''}
+      ${
+        // This allows the video dimensions to be used in
+        // an aspect-ratio CSS rule.
+        // This needs to be done manually because the solution standards folks
+        // spec'd doesn't work for <video>.
+        // https://github.com/w3c/csswg-drafts/issues/7524
+        width !== undefined && height !== undefined
+          ? `style="--vid-width: ${width}; --vid-height: ${height}"`
+          : ''
+      }
     >
       ${src.map(s => generateSource(bucket, s))}
     </video>`;
