@@ -16,7 +16,7 @@
 
 const crypto = require('crypto');
 
-function _rewriteIds(suffix, raw) {
+function rewriteIds(suffix, raw) {
   return (
     raw
       // Replace id="bar"
@@ -58,7 +58,7 @@ const updateSvgForInclude = (raw, options = {}) => {
   const hash = crypto.createHash('md5').update(raw).digest('hex');
   const suffix = hash.substring(0, 10);
 
-  let svg = _rewriteIds(suffix, raw);
+  let svg = rewriteIds(suffix, raw);
 
   const {label, hidden, className, id} = options;
 
@@ -86,4 +86,4 @@ const updateSvgForInclude = (raw, options = {}) => {
   return svg;
 };
 
-module.exports = {updateSvgForInclude};
+module.exports = {updateSvgForInclude, rewriteIds};
