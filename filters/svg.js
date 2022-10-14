@@ -14,9 +14,27 @@
  * limitations under the License.
  */
 
-// We use an incrementing count of SVG to ensure unique IDs. We could also hash
-// the contents as duplicate SVGs share styles, but this is easier.
-let svgIndex = 0;
+const crypto = require('crypto');
+
+function rewriteIds(suffix, raw) {
+  return (
+    raw
+      // Replace id="bar"
+      .replace(/\bid="(.+?)"/g, (_, id) => {
+        return `id="${id}${suffix}"`;
+      })
+
+      // Replace href="#bar" (this will also work on xlink:href=...)
+      .replace(/\bhref="#(.+?)"/g, (_, id) => {
+        return `href="#${id}${suffix}"`;
+      })
+
+      // Replace url(#bar)
+      .replace(/\burl\(#(.+?)\)/g, (_, id) => {
+        return `url(#${id}${suffix})`;
+      })
+  );
+}
 
 /**
  * This rewrites SVGs so we can safely inline them into our pages, as well as
@@ -35,12 +53,19 @@ const updateSvgForInclude = (raw, options = {}) => {
     return '';
   }
 
+  // Hash the raw SVG and use part of as suffix for IDs inside the SVG
+  // to avoid clashes between different inlined SVGs
+  const hash = crypto.createHash('md5').update(raw).digest('hex');
+  const suffix = hash.substring(0, 10);
+
+  let svg = rewriteIds(suffix, raw);
+
   const {label, hidden, className, id} = options;
 
   if (hidden) {
-    raw = raw.replace('<svg', '<svg aria-hidden="true"');
+    svg = svg.replace('<svg', '<svg aria-hidden="true"');
   } else if (label) {
-    raw = raw.replace('<svg', `<svg role="img" aria-label="${label}"`);
+    svg = svg.replace('<svg', `<svg role="img" aria-label="${label}"`);
   } else {
     throw new Error(`SVGs must provide a label or set hidden to true.
     If you're using icon() or svg() you may have forgotten the label argument.
@@ -48,35 +73,17 @@ const updateSvgForInclude = (raw, options = {}) => {
     ${raw}`);
   }
 
-  const localIndex = ++svgIndex;
-  const suffix = '_' + localIndex.toString(36);
-
   if (className) {
-    raw = raw.replace('<svg', `<svg class="${className}"`);
+    svg = svg.replace('<svg', `<svg class="${className}"`);
   }
-
-  // Replace id="bar"
-  raw = raw.replace(/\bid="(.+?)"/g, (_, id) => {
-    return `id="${id}${suffix}"`;
-  });
-
-  // Replace href="#bar" (this will also work on xlink:href=...)
-  raw = raw.replace(/\bhref="#(.+?)"/g, (_, id) => {
-    return `href="#${id}${suffix}"`;
-  });
-
-  // Replace url(#bar)
-  raw = raw.replace(/\burl\(#(.+?)\)/g, (_, id) => {
-    return `url(#${id}${suffix})`;
-  });
 
   // Gives the SVG itself a valid ID. We do this last so that it's not made unique above.
   // Earlier IDs win over later ones, so if the raw file had another ID, it's ignored now.
   if (id) {
-    raw = raw.replace('<svg', `<svg id="${id}"`);
+    svg = svg.replace('<svg', `<svg id="${id}"`);
   }
 
-  return raw;
+  return svg;
 };
 
-module.exports = {updateSvgForInclude};
+module.exports = {updateSvgForInclude, rewriteIds};
