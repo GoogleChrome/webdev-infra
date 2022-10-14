@@ -9,6 +9,12 @@
         "ecmaVersion": 2018,
         "sourceType": "module"
       }
+    },
+    {
+      "files": ["tests/**/*.test.js"],
+      "rules": {
+        "node/no-unpublished-require": 0
+      }
     }
   ],
   "rules": {
