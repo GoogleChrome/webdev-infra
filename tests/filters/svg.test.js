@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const test = require('ava');
+const test = require('ava').default;
 
 const {rewriteIds} = require('../../filters/svg.js');
 
