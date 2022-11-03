@@ -68,6 +68,12 @@ class CssTransform {
       encoding: 'utf-8',
     });
 
+    if (!originalCss.length) {
+      throw new Error(
+        'The CSS passed to CssTransformer is empty. Has it already been built?'
+      );
+    }
+
     this.css = csso.minify(originalCss).css;
   }
 
@@ -80,6 +86,13 @@ class CssTransform {
   async _getJs() {
     let contents = [];
     const paths = await fg(this.config.jsPaths);
+
+    if (!paths.length) {
+      throw new Error(
+        'The glob you passed to CssTransformer to scan for JavaScript files did not match any files.'
+      );
+    }
+
     for (const filePath of paths) {
       contents.push(
         fs.readFile(filePath, {
@@ -90,19 +103,27 @@ class CssTransform {
 
     contents = await Promise.all(contents);
     this.js = contents.join('');
+
+    if (!this.js.length) {
+      throw new Error(
+        'The JavaScript passed to CssTransformer is empty. Has it been built?'
+      );
+    }
   }
 
   async transform(output, outputPath) {
+    await this.ready;
+
     // For dynamic content (e.g. rendered via Eleventy Serverless),
     // outputPath is false. Also we want to skip files like XML,
     // JSON and others that might also be emitted by 11ty
-    if (!outputPath || !outputPath?.endsWith('.html')) {
+    if (outputPath && !outputPath.endsWith('.html')) {
       return output;
     }
 
     // Empty pages or pages that use different styles than the
     // base CSS should also be skipped
-    if (!output || !output.length || /data-style-override/.test(output)) {
+    if (!output || /data-style-override/.test(output)) {
       return output;
     }
 
@@ -112,7 +133,10 @@ class CssTransform {
           raw: output,
           extension: 'html',
         },
-        'dist/js/**/*.js',
+        {
+          raw: this.js,
+          extension: 'js',
+        },
       ],
       css: [
         {
