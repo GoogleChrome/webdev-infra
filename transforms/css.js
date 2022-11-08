@@ -21,22 +21,26 @@
  */
 
 const fs = require('fs/promises');
+const path = require('path');
 const fg = require('fast-glob');
 
 const PurgeCSS = require('purgecss').PurgeCSS;
 const csso = require('csso');
 
+const {pagesInlineCss} = require('../shortcodes/InlineCss');
+
 class CssTransform {
   constructor() {
     this.config = {};
-    this.css = '';
+    this.cssBasePath = '';
+    this.css = new Map();
     this.js = '';
   }
 
   /**
    *
    * @param {{
-   *   cssPath: string,
+   *   cssBasePath: string,
    *   jsPaths: string[],
    *   insert: function,
    * }} config
@@ -52,29 +56,47 @@ class CssTransform {
   }
 
   /**
-   * Performs all async init work, like reading and minifying the CSS
-   * and reading all JS files upfront
+   * Performs all async init work, like reading all JS files upfront
    */
   init() {
-    const work = [this._getCss(), this._getJs()];
+    const work = [this._getJs()];
     return Promise.all(work);
   }
 
   /**
-   * Reads and minifies the CSS from the configured path
+   * Parses <link rel=stylesheet> elements from the rendered output
+   * tries to read the file linked in href from the local disk,
+   * minifies it and stores it in a Map
+   * @param {string} outputPath
    */
-  async _getCss() {
-    const originalCss = await fs.readFile(this.config.cssPath, {
-      encoding: 'utf-8',
-    });
-
-    if (!originalCss.length) {
-      throw new Error(
-        'The CSS passed to CssTransformer is empty. Has it already been built?'
-      );
+  async _getCss(outputPath) {
+    const cssPaths = pagesInlineCss.get(outputPath);
+    if (!cssPaths) {
+      console.warn('[CSS Transformer]', outputPath, 'does not use any CSS?');
+      return '';
     }
 
-    this.css = csso.minify(originalCss).css;
+    const usedCss = [];
+    for (const cssPath of cssPaths) {
+      let css = this.css.get(cssPath);
+      if (css) {
+        usedCss.push(css);
+        continue;
+      }
+
+      const originalCss = await fs.readFile(
+        path.join(this.config.cssBasePath, cssPath),
+        {
+          encoding: 'utf-8',
+        }
+      );
+      css = csso.minify(originalCss).css;
+
+      this.css.set(cssPath, css);
+      usedCss.push(css);
+    }
+
+    return usedCss.join('');
   }
 
   /**
@@ -111,21 +133,30 @@ class CssTransform {
     }
   }
 
+  /**
+   *
+   * @param {string} output
+   * @param {string} outputPath
+   * @returns
+   */
   async transform(output, outputPath) {
     await this.ready;
 
     // For dynamic content (e.g. rendered via Eleventy Serverless),
+    // and content that is not written (permalink: false)
     // outputPath is false. Also we want to skip files like XML,
     // JSON and others that might also be emitted by 11ty
-    if (outputPath && !outputPath.endsWith('.html')) {
+    if (!outputPath || !outputPath.endsWith('.html')) {
       return output;
     }
 
     // Empty pages or pages that use different styles than the
     // base CSS should also be skipped
-    if (!output || /data-style-override/.test(output)) {
+    if (!output) {
       return output;
     }
+
+    const css = await this._getCss(outputPath);
 
     const result = await new PurgeCSS().purge({
       content: [
@@ -140,7 +171,7 @@ class CssTransform {
       ],
       css: [
         {
-          raw: this.css,
+          raw: css,
         },
       ],
       fontFace: true,
