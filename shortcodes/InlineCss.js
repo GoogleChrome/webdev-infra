@@ -21,13 +21,13 @@ const pagesInlineCss = new Map();
 /**
  * Adds a CSS file path to a map in production or inserts
  * a <link> element to that file during development
+ * @this ShortcodeContext
  * @param {string} cssPath Path to a CSS file in dist
  */
 function InlineCss(cssPath) {
-  // @ts-ignore: `this` has type of `any`
+  console.log(this);
   const css = pagesInlineCss.get(this.ctx.page.outputPath) || [];
   css.push(cssPath);
-  // @ts-ignore: `this` has type of `any`
   pagesInlineCss.set(this.ctx.page.outputPath, css);
 
   // For non-production environments we never want to inline,
