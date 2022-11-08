@@ -1,6 +1,6 @@
 {
   "name": "webdev-infra",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
   "engines": {
@@ -26,8 +26,11 @@
     "@justinribeiro/lite-youtube": "^0.9.1",
     "browser-media-mime-type": "^1.0.0",
     "common-tags": "^1.8.0",
+    "csso": "5.0.5",
+    "fast-glob": "3.2.12",
     "lit-element": "^2.5.1",
     "markdown-it": "^12.3.2",
+    "purgecss": "5.0.0",
     "querystring": "^0.2.1",
     "striptags": "^3.1.1"
   },
