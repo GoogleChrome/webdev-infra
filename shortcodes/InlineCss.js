@@ -25,7 +25,6 @@ const pagesInlineCss = new Map();
  * @param {string} cssPath Path to a CSS file in dist
  */
 function InlineCss(cssPath) {
-  console.log(this);
   const css = pagesInlineCss.get(this.ctx.page.outputPath) || [];
   css.push(cssPath);
   pagesInlineCss.set(this.ctx.page.outputPath, css);
