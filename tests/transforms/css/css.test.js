@@ -18,6 +18,7 @@ const test = require('ava').default;
 const fs = require('fs');
 const path = require('path');
 
+const {pagesInlineCss} = require('../../../shortcodes/InlineCss');
 const {CssTransform} = require('../../../transforms/css');
 
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), {
@@ -26,12 +27,15 @@ const html = fs.readFileSync(path.join(__dirname, 'index.html'), {
 
 test.beforeEach(t => {
   const transform = new CssTransform().configure({
-    cssPath: path.join(__dirname, 'main.css'),
+    cssBasePath: path.join(__dirname),
     jsPaths: [path.join(__dirname, 'bundle.*.js')],
     insert: (content, result) => {
       return content.replace('/* CSS */', result);
     },
   });
+
+  // Mock the usage of the {% InlineCss 'main.css' %} shortcode
+  pagesInlineCss.set('tmp/index.html', ['main.css']);
 
   t.context = {
     transform,
@@ -59,7 +63,6 @@ test('unused classes are purged', async t => {
 
 test('classes used by js are not purged', async t => {
   const result = await t.context.transform(html, 'tmp/index.html');
-  console.log(result);
 
   t.assert(result.includes('js-blue'));
   t.assert(result.includes('js-red'));
