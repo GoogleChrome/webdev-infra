@@ -39,6 +39,7 @@
     "@babel/core": "^7.13.15",
     "@babel/eslint-parser": "^7.13.14",
     "@types/common-tags": "^1.8.0",
+    "@types/csso": "^5.0.0",
     "@types/node": "^14.11.2",
     "ava": "^3.12.1",
     "eslint-plugin-ava": "^12.0.0",
