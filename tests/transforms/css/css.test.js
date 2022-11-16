@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 
 const {pagesInlineCss} = require('../../../shortcodes/InlineCss');
-const {CssTransform} = require('../../../transforms/css');
+const {CssTransform} = require('../../../transforms/inlineCss');
 
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), {
   encoding: 'utf8',
