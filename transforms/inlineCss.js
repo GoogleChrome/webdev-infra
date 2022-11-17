@@ -45,7 +45,7 @@ class InlineCssTransform {
    *   cssBasePath: string,
    *   jsPaths: string[],
    *   insert: function,
-   *   force: boolean,
+   *   force?: boolean,
    * }} config
    * @returns
    */

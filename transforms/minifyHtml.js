@@ -33,7 +33,7 @@ class MinifyHtmlTransform {
    *
    * @param {{
    *   swcOptions: import("@swc/html").Options,
-   *   force: boolean,
+   *   force?: boolean,
    * }} config
    * @returns
    */
