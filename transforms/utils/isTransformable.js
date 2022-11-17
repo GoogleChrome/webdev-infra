@@ -16,23 +16,18 @@
 
 /**
  * Checks if the transformed page has indeed output and an outputPath
- * that ends in HTML. Pages that are actually not emitted have outputPath
- * false and hence do not need to be transformed. outputPath is also false
+ * that ends in HTML. Pages that are actually not emitted (because they
+ * have set permalink: false for example) have an undefined outputPath
+ * and hence do not need to be transformed.
  * for
  * @param {string} output
  * @param {string} outputPath
  */
 module.exports = function isTransformable(output, outputPath) {
-  // For dynamic content (e.g. rendered via Eleventy Serverless),
-  // and content that is not written (permalink: false)
-  // outputPath is false. Also we want to skip files like XML,
-  // JSON and others that might also be emitted by 11ty
   if (!outputPath || !outputPath.endsWith('.html')) {
     return false;
   }
 
-  // Empty pages or pages that use different styles than the
-  // base CSS should also be skipped
   if (!output) {
     return false;
   }
