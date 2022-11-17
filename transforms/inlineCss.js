@@ -33,6 +33,7 @@ const isTransformable = require('./utils/isTransformable');
 class InlineCssTransform {
   constructor() {
     this.config = {};
+    this.force = false;
     this.cssBasePath = '';
     this.css = new Map();
     this.js = '';
@@ -44,11 +45,13 @@ class InlineCssTransform {
    *   cssBasePath: string,
    *   jsPaths: string[],
    *   insert: function,
+   *   force: boolean,
    * }} config
    * @returns
    */
   configure(config) {
     this.config = config || {};
+    this.force = config.force === undefined ? false : config.force;
     // Initing is off-loaded as configuring eleventy is not allowed
     // to be async, though bootstrapping this transform involves
     // some async work (reading files, minifying CSS, ...)
@@ -147,7 +150,7 @@ class InlineCssTransform {
   async transform(output, outputPath) {
     await this.ready;
 
-    if (!isTransformable(output, outputPath)) {
+    if (!this.force && !isTransformable(output, outputPath)) {
       return output;
     }
 

@@ -26,17 +26,21 @@ const isTransformable = require('./utils/isTransformable');
 class MinifyHtmlTransform {
   constructor() {
     this.config = {};
+    this.force = false;
   }
 
   /**
    *
    * @param {{
    *   swcOptions: import("@swc/html").Options,
+   *   force: boolean,
    * }} config
    * @returns
    */
   configure(config) {
     this.config = config || {};
+    this.force = config.force === undefined ? false : config.force;
+
     return this.transform.bind(this);
   }
 
@@ -47,7 +51,7 @@ class MinifyHtmlTransform {
    * @returns
    */
   async transform(output, outputPath) {
-    if (!isTransformable(output, outputPath)) {
+    if (!this.force && !isTransformable(output, outputPath)) {
       return output;
     }
 
