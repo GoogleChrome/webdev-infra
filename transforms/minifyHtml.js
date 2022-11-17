@@ -19,9 +19,28 @@
  * from templates by 11ty
  */
 
-const swcMinifier = require('@swc/html');
+const swcHtml = require('@swc/html');
 
 const isTransformable = require('./utils/isTransformable');
+
+/**
+ * @type {import("@swc/html").Options}
+ */
+const swcHtmlOptions = {
+  collapseWhitespaces: 'smart',
+  removeEmptyMetadataElements: true,
+  removeComments: true,
+  preserveComments: [],
+  removeEmptyAttributes: true,
+  removeRedundantAttributes: true,
+  collapseBooleanAttributes: true,
+  normalizeAttributes: true,
+  minifyJs: true,
+  minifyCss: true,
+  sortAttributes: true,
+  tagOmission: false,
+  selfClosingVoidElements: true,
+};
 
 class MinifyHtmlTransform {
   constructor() {
@@ -32,13 +51,14 @@ class MinifyHtmlTransform {
   /**
    *
    * @param {{
-   *   swcOptions: import("@swc/html").Options,
+   *   swcHtmlOptions: import("@swc/html").Options,
    *   force?: boolean,
    * }} config
    * @returns
    */
   configure(config) {
     this.config = config || {};
+    this.swcHtmlOptions = swcHtmlOptions || this.config.swcHtmlOptions;
     this.force = config.force === undefined ? false : config.force;
 
     return this.transform.bind(this);
@@ -56,21 +76,10 @@ class MinifyHtmlTransform {
     }
 
     try {
-      const result = await swcMinifier.minify(Buffer.from(output), {
-        collapseWhitespaces: 'smart',
-        removeEmptyMetadataElements: true,
-        removeComments: true,
-        preserveComments: [],
-        removeEmptyAttributes: true,
-        removeRedundantAttributes: true,
-        collapseBooleanAttributes: true,
-        normalizeAttributes: true,
-        minifyJs: true,
-        minifyCss: true,
-        sortAttributes: true,
-        tagOmission: false,
-        selfClosingVoidElements: true,
-      });
+      const result = await swcHtml.minify(
+        Buffer.from(output),
+        swcHtmlOptions
+      );
       return result.code;
     } catch (err) {
       console.error(
@@ -84,4 +93,4 @@ class MinifyHtmlTransform {
   }
 }
 
-module.exports = {MinifyHtmlTransform};
+module.exports = {swcHtmlOptions, MinifyHtmlTransform};
