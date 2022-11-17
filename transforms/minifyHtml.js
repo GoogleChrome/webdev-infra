@@ -76,10 +76,7 @@ class MinifyHtmlTransform {
     }
 
     try {
-      const result = await swcHtml.minify(
-        Buffer.from(output),
-        swcHtmlOptions
-      );
+      const result = await swcHtml.minify(Buffer.from(output), swcHtmlOptions);
       return result.code;
     } catch (err) {
       console.error(
