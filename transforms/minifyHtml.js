@@ -19,28 +19,8 @@
  * from templates by 11ty
  */
 
-const swcHtml = require('@swc/html');
-
+const minifyHtml = require('./utils/minifyHtml');
 const isTransformable = require('./utils/isTransformable');
-
-/**
- * @type {import("@swc/html").Options}
- */
-const swcHtmlOptions = {
-  collapseWhitespaces: 'smart',
-  removeEmptyMetadataElements: true,
-  removeComments: true,
-  preserveComments: [],
-  removeEmptyAttributes: true,
-  removeRedundantAttributes: true,
-  collapseBooleanAttributes: true,
-  normalizeAttributes: true,
-  minifyJs: true,
-  minifyCss: true,
-  sortAttributes: true,
-  tagOmission: false,
-  selfClosingVoidElements: true,
-};
 
 class MinifyHtmlTransform {
   constructor() {
@@ -58,7 +38,7 @@ class MinifyHtmlTransform {
    */
   configure(config) {
     this.config = config || {};
-    this.swcHtmlOptions = swcHtmlOptions || this.config.swcHtmlOptions;
+    this.swcHtmlOptions = this.config.swcHtmlOptions;
     this.force = config.force === undefined ? false : config.force;
 
     return this.transform.bind(this);
@@ -76,8 +56,7 @@ class MinifyHtmlTransform {
     }
 
     try {
-      const result = await swcHtml.minify(Buffer.from(output), swcHtmlOptions);
-      return result.code;
+      return await minifyHtml(output, this.swcHtmlOptions);
     } catch (err) {
       console.error(
         '[MinifyHtmlTransform]',
@@ -90,4 +69,4 @@ class MinifyHtmlTransform {
   }
 }
 
-module.exports = {swcHtmlOptions, MinifyHtmlTransform};
+module.exports = {MinifyHtmlTransform};

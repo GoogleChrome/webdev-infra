@@ -18,12 +18,11 @@
  * @fileoverview Async nunjucks filter to minify a HTML fragment
  */
 
-const swcHtml = require('@swc/html');
-const {swcHtmlOptions} = require('../transforms/minifyHtml');
+const minify = require('../transforms/utils/minifyHtml');
 
-async function minifyHtml(html) {
-  const result = await swcHtml.minify(Buffer.from(html), swcHtmlOptions);
-  return result.code;
+async function minifyHtml(html, callback) {
+  const result = minify(html);
+  callback(null, result);
 }
 
 module.exports = {minifyHtml};
