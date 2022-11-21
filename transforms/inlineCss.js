@@ -28,10 +28,12 @@ const PurgeCSS = require('purgecss').PurgeCSS;
 const csso = require('csso');
 
 const {pagesInlineCss} = require('../shortcodes/InlineCss');
+const isTransformable = require('./utils/isTransformable');
 
-class CssTransform {
+class InlineCssTransform {
   constructor() {
     this.config = {};
+    this.force = false;
     this.cssBasePath = '';
     this.css = new Map();
     this.js = '';
@@ -43,11 +45,13 @@ class CssTransform {
    *   cssBasePath: string,
    *   jsPaths: string[],
    *   insert: function,
+   *   force?: boolean,
    * }} config
    * @returns
    */
   configure(config) {
     this.config = config || {};
+    this.force = config.force === undefined ? false : config.force;
     // Initing is off-loaded as configuring eleventy is not allowed
     // to be async, though bootstrapping this transform involves
     // some async work (reading files, minifying CSS, ...)
@@ -72,7 +76,11 @@ class CssTransform {
   async _getCss(outputPath) {
     const cssPaths = pagesInlineCss.get(outputPath);
     if (!cssPaths) {
-      console.warn('[CSS Transformer]', outputPath, 'does not use any CSS?');
+      console.warn(
+        '[InlineCssTransformer]',
+        outputPath,
+        'does not use any CSS?'
+      );
       return '';
     }
 
@@ -111,7 +119,7 @@ class CssTransform {
 
     if (!paths.length) {
       throw new Error(
-        'The glob you passed to CssTransformer to scan for JavaScript files did not match any files.'
+        'The glob you passed to InlineCssTransformer to scan for JavaScript files did not match any files.'
       );
     }
 
@@ -128,7 +136,7 @@ class CssTransform {
 
     if (!this.js.length) {
       throw new Error(
-        'The JavaScript passed to CssTransformer is empty. Has it been built?'
+        'The JavaScript passed to InlineCssTransformer is empty. Has it been built?'
       );
     }
   }
@@ -142,17 +150,7 @@ class CssTransform {
   async transform(output, outputPath) {
     await this.ready;
 
-    // For dynamic content (e.g. rendered via Eleventy Serverless),
-    // and content that is not written (permalink: false)
-    // outputPath is false. Also we want to skip files like XML,
-    // JSON and others that might also be emitted by 11ty
-    if (!outputPath || !outputPath.endsWith('.html')) {
-      return output;
-    }
-
-    // Empty pages or pages that use different styles than the
-    // base CSS should also be skipped
-    if (!output) {
+    if (!this.force && !isTransformable(output, outputPath)) {
       return output;
     }
 
@@ -184,4 +182,4 @@ class CssTransform {
   }
 }
 
-module.exports = {CssTransform};
+module.exports = {InlineCssTransform};

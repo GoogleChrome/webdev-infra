@@ -19,14 +19,14 @@ const fs = require('fs');
 const path = require('path');
 
 const {pagesInlineCss} = require('../../../shortcodes/InlineCss');
-const {CssTransform} = require('../../../transforms/css');
+const {InlineCssTransform} = require('../../../transforms/inlineCss');
 
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), {
   encoding: 'utf8',
 });
 
 test.beforeEach(t => {
-  const transform = new CssTransform().configure({
+  const transform = new InlineCssTransform().configure({
     cssBasePath: path.join(__dirname),
     jsPaths: [path.join(__dirname, 'bundle.*.js')],
     insert: (content, result) => {
