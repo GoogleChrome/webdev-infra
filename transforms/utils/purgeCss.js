@@ -19,12 +19,16 @@ const PurgeCSS = require('purgecss').PurgeCSS;
 /**
  * The functionality to purge unused CSS from the markup isolated
  * as a standalone function to also be usuable in a stateless worker
- * @param {String} html The page's markup
- * @param {String} css CSS used on the page that then gets inlined
- * @param {String} js JavaScript used on the page
- * @returns String
+ * @param {{
+ *  html: string,
+ *  css: string,
+ *  js: string,
+ * }} payload The stringified assets making up a page
+ * @returns
  */
-async function purgeCss(html, css, js) {
+async function purgeCss(payload) {
+  const {html, css, js} = payload;
+
   const result = await new PurgeCSS().purge({
     content: [
       {

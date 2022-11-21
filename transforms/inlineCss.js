@@ -23,12 +23,11 @@ const fs = require('fs/promises');
 const path = require('path');
 const fg = require('fast-glob');
 const csso = require('csso');
+const Piscina = require('piscina');
 
 const {pagesInlineCss} = require('../shortcodes/InlineCss');
 const isTransformable = require('./utils/isTransformable');
 const purgeCss = require('./utils/purgeCss');
-// eslint-disable-next-line node/no-missing-require
-const {pool: buildWorkerPool} = require('async-transforms/worker');
 
 class InlineCssTransform {
   constructor() {
@@ -55,8 +54,8 @@ class InlineCssTransform {
 
     this.force = config.force === undefined ? false : config.force;
     if (config.pool) {
-      this.pool = buildWorkerPool(path.join(__dirname, 'utils/purgeCss.js'), {
-        minTasks: 0,
+      this.pool = new Piscina({
+        filename: path.join(__dirname, 'utils/purgeCss.js'),
       });
     }
 
@@ -166,9 +165,9 @@ class InlineCssTransform {
 
     let result = '';
     if (this.pool) {
-      result = await this.pool(output, css, this.js);
+      result = await this.pool.run({html: output, css, js: this.js});
     } else {
-      result = await purgeCss(output, css, this.js);
+      result = await purgeCss({html: output, css, js: this.js});
     }
 
     return this.config.insert(output, result);
