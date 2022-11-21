@@ -19,16 +19,16 @@
  * for both web.dev and developer.chrome.com, encapsulated in a transform
  * that can be added to 11ty
  */
-
 const fs = require('fs/promises');
 const path = require('path');
 const fg = require('fast-glob');
-
-const PurgeCSS = require('purgecss').PurgeCSS;
 const csso = require('csso');
 
 const {pagesInlineCss} = require('../shortcodes/InlineCss');
 const isTransformable = require('./utils/isTransformable');
+const purgeCss = require('./utils/purgeCss');
+// eslint-disable-next-line node/no-missing-require
+const {pool: buildWorkerPool} = require('async-transforms/worker');
 
 class InlineCssTransform {
   constructor() {
@@ -45,13 +45,21 @@ class InlineCssTransform {
    *   cssBasePath: string,
    *   jsPaths: string[],
    *   insert: function,
+   *   pool?: boolean,
    *   force?: boolean,
    * }} config
    * @returns
    */
   configure(config) {
     this.config = config || {};
+
     this.force = config.force === undefined ? false : config.force;
+    if (config.pool) {
+      this.pool = buildWorkerPool(path.join(__dirname, 'utils/purgeCss.js'), {
+        minTasks: 0,
+      });
+    }
+
     // Initing is off-loaded as configuring eleventy is not allowed
     // to be async, though bootstrapping this transform involves
     // some async work (reading files, minifying CSS, ...)
@@ -156,29 +164,14 @@ class InlineCssTransform {
 
     const css = await this._getCss(outputPath);
 
-    const result = await new PurgeCSS().purge({
-      content: [
-        {
-          raw: output,
-          extension: 'html',
-        },
-        {
-          raw: this.js,
-          extension: 'js',
-        },
-      ],
-      css: [
-        {
-          raw: css,
-        },
-      ],
-      fontFace: true,
-      defaultExtractor: content => {
-        return content.match(/[A-Za-z0-9\\:_-]+/g) || [];
-      },
-    });
+    let result = '';
+    if (this.pool) {
+      result = await this.pool(output, css, this.js);
+    } else {
+      result = await purgeCss(output, css, this.js);
+    }
 
-    return this.config.insert(output, result[0].css);
+    return this.config.insert(output, result);
   }
 }
 

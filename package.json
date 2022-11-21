@@ -25,6 +25,7 @@
     "@imgix/js-core": "^3.1.3",
     "@justinribeiro/lite-youtube": "^0.9.1",
     "@swc/html": "0.0.18",
+    "async-transforms": "^1.0.9",
     "browser-media-mime-type": "^1.0.0",
     "common-tags": "^1.8.0",
     "csso": "5.0.5",
