@@ -28,6 +28,7 @@ const Piscina = require('piscina');
 const {pagesInlineCss} = require('../shortcodes/InlineCss');
 const isTransformable = require('./utils/isTransformable');
 const purgeCss = require('./utils/purgeCss');
+const getMaxThreads = require('./utils/getMaxThreads');
 
 class InlineCssTransform {
   constructor() {
@@ -55,6 +56,7 @@ class InlineCssTransform {
     this.force = config.force === undefined ? false : config.force;
     if (config.pool) {
       this.pool = new Piscina({
+        maxThreads: getMaxThreads(),
         filename: path.join(__dirname, 'utils/purgeCss.js'),
       });
     }
