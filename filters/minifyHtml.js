@@ -23,7 +23,7 @@ const swcHtml = require('@swc/html');
 const {swcHtmlOptions} = require('../transforms/utils/minifyHtml');
 
 function minifyHtml(html) {
-  return swcHtml.minifyFragmentSync(html, swcHtmlOptions);
+  return swcHtml.minifyFragmentSync(Buffer.from(html), swcHtmlOptions);
 }
 
 module.exports = {minifyHtml};
