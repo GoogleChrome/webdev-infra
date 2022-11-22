@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+const swcHtml = require('@swc/html');
+
 /**
- * @fileoverview Async nunjucks filter to minify a HTML fragment
+ * @fileoverview Filter to minify a HTML fragment
  */
 
-const minify = require('../transforms/utils/minifyHtml');
+const {swcHtmlOptions} = require('../transforms/utils/minifyHtml');
 
-async function minifyHtml(html, callback) {
-  const result = minify(html);
-  callback(null, result);
+function minifyHtml(html) {
+  return swcHtml.minifyFragmentSync(html, swcHtmlOptions);
 }
 
 module.exports = {minifyHtml};

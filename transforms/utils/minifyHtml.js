@@ -40,4 +40,4 @@ async function minifyHtml(html, options = swcHtmlOptions) {
   return result.code;
 }
 
-module.exports = minifyHtml;
+module.exports = {swcHtmlOptions, minifyHtml};

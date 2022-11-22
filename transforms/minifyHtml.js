@@ -19,7 +19,7 @@
  * from templates by 11ty
  */
 
-const minifyHtml = require('./utils/minifyHtml');
+const {minifyHtml} = require('./utils/minifyHtml');
 const isTransformable = require('./utils/isTransformable');
 
 class MinifyHtmlTransform {
