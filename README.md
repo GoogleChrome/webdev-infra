@@ -11,3 +11,6 @@ git push && git push --tags
 ```
 
 This will cause CI to release a new version to npm.
+
+## Workspaces
+This repository makes use of NPM workspaces to leverage publishing multiple packages from one monorepo under the vendor namespace @webdev-infra (https://docs.npmjs.com/cli/v7/using-npm/workspaces)

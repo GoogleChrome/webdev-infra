@@ -1,0 +1,27 @@
+{
+  "name": "@webdev-infra/shortcode-youtube",
+  "version": "1.0.41",
+  "description": "",
+  "main": "YouTube.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChrome/webdev-infra.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GoogleChrome/webdev-infra/issues"
+  },
+  "homepage": "https://github.com/GoogleChrome/webdev-infra#readme",
+  "dependencies": {
+    "common-tags": "^1.8.0"
+  },
+  "keywords": [
+    "eleventy",
+    "shortcode",
+    "youtube"
+  ]
+}
