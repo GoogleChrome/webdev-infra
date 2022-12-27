@@ -8,6 +8,7 @@
     "noImplicitAny": false,
     "skipLibCheck": true,
     "lib": ["es2018", "DOM"],
+    "types": ["@mdn/browser-compat-data/types"]
   },
   "include": ["**/*"],
   "exclude": ["tests/**"]
