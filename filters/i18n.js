@@ -14,41 +14,31 @@
  * limitations under the License.
  */
 
-const {Dictionary} = require('../i18n');
-
-/** @type {{
- *   defaultLocale: string,
- *   dictPaths: string[],
- * }} */
-const DEFAULT_CONFIG = {defaultLocale: 'en', dictPaths: []};
+const {dictionary} = require('../utils/dictionary');
 
 class i18nFilter {
-  constructor() {
-    this.config = DEFAULT_CONFIG;
-    this.dictionary = new Dictionary();
-  }
-
   /**
    *
-   * @param config
+   * @param {{
+   *   defaultLocale: string,
+   *   dictPaths?: string[],
+   * }} config
    * @returns
    */
-  configure(config = DEFAULT_CONFIG) {
-    this.config = config;
-
-    if (!this.config.defaultLocale) {
+  configure(config) {
+    if (!config.defaultLocale) {
       throw new Error('[i18nFilter] No default locale given.');
     }
 
-    if (!Array.isArray(this.config.dictPaths)) {
-      throw new Error('[i18nFilter] No dictPaths given.');
+    this.defaultLocale = config.defaultLocale;
+
+    if (Array.isArray(config.dictPaths)) {
+      for (const path of config.dictPaths) {
+        dictionary.load(path);
+      }
     }
 
-    for (const path of this.config.dictPaths) {
-      this.dictionary.load(path);
-    }
-
-    return this.dictionary.get.bind(this.dictionary);
+    return this.filter.bind(this);
   }
 
   /**
@@ -58,7 +48,9 @@ class i18nFilter {
    * @returns The translation if it exists.
    */
   filter(keyPath, locale) {
-    return this.dictionary.get(keyPath, locale, this.config.defaultLocale);
+    if (this.defaultLocale) {
+      return dictionary.get(keyPath, locale, this.defaultLocale);
+    }
   }
 }
 

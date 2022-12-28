@@ -20,28 +20,40 @@ const path = require('path');
 const fg = require('fast-glob');
 const yaml = require('js-yaml');
 const get = require('lodash.get');
+const set = require('lodash.set');
 
 class Dictionary {
   constructor() {
     this.data = {};
 
-    this.load(path.join(__dirname, 'data'));
+    this.load(path.join(__dirname, '../data/i18n'));
   }
 
   /**
-   * Recursively walks a directory and creates an object out of the file tree.
+   * Recursively reads YAML files from a directory and creates a
+   * nested object out of the file tree, including the file contents
    * For example: _data/i18n/foo/bar/baz.yml would produce:
-   * {foo: {bar: baz: { ... }}}
+   * {foo: {bar: baz: { <baz.yml contents> }}}
    * @param {string} dir The directory to walk
    */
   load(dir) {
     const files = fg.sync(path.join(dir, '/**/*.{yml,yaml}'));
     const entries = {};
 
+    const baseDir = path.dirname(dir);
     for (const file of files) {
+      const dir = path.dirname(file);
       const ext = path.extname(file);
       const name = path.basename(file, ext);
-      entries[name] = yaml.load(fs.readFileSync(file, 'utf-8'));
+
+      // The dir is an absolute path that needs to be transformed in
+      // a key path that can be used to set a value in a nested object
+      const keyPath = `${dir
+        .replace(baseDir, '')
+        .slice(1)
+        .split('/')
+        .join('.')}.${name}`;
+      set(entries, keyPath, yaml.load(fs.readFileSync(file, 'utf-8')));
     }
 
     Object.assign(this.data, entries);
@@ -54,21 +66,30 @@ class Dictionary {
    * @param {string} defaultLocale A fallback, if there is no translation for locale
    *
    */
-  get(keyPath, locale, defaultLocale) {
-    try {
-      const out =
-        get(this.data, keyPath)[locale] ??
-        get(this.data, keyPath)[defaultLocale];
-      if (out !== undefined) {
-        return out;
-      }
-    } catch (err) {
-      // Ignore potential key and index errors, throw below
+  get(keyPath, locale, defaultLocale = 'en') {
+    const value = get(this.data, keyPath);
+    if (!value) {
+      throw new Error(`No translations for: ${keyPath}`);
     }
-    throw new Error(`Could not find i18n result for: ${keyPath}`);
+
+    if (value[locale]) {
+      return value[locale];
+    }
+
+    if (value[defaultLocale]) {
+      return value[defaultLocale];
+    }
+
+    throw new Error(`No default translation for: ${keyPath}`);
   }
 }
 
+const dictionary = new Dictionary();
+
 module.exports = {
   Dictionary,
+  dictionary,
+  i18n: (keyPath, locale, defaultLocale = 'en') => {
+    return dictionary.get(keyPath, locale, defaultLocale);
+  },
 };
