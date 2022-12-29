@@ -40,7 +40,6 @@ class BrowserCompat {
     }
     this.templatePath = config.templatePath;
     this.template = fs.readFileSync(this.templatePath, {encoding: 'utf-8'});
-    console.log(this.template);
 
     if (!config.eleventyConfig) {
       throw new Error('[BrowserCompat shortcode] eleventyConfig required.');
@@ -140,7 +139,7 @@ class BrowserCompat {
 
     const shortcodeContext = {};
     if (this.browsers && data[feature] && data[feature].support) {
-      shortcodeContext.compatIcons = this.browsers.map(browser => {
+      shortcodeContext.browsers = this.browsers.map(browser => {
         const support = Array.isArray(data[feature].support[browser])
           ? data[feature].support[browser][0]
           : data[feature].support[browser];
@@ -160,7 +159,8 @@ class BrowserCompat {
         ].join('');
 
         return {
-          browser,
+          name: browser,
+          supportInfo,
           ariaLabel,
           compat: supportInfo.compatProperty,
           icon: supportInfo.icon,
