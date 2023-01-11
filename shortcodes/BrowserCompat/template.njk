@@ -1,0 +1,21 @@
+<div class="wdi-browser-compat">
+  <span class="wdi-browser-compat__label">{{- browserCompat.supportLabel -}}</span>
+  <span class="wdi-browser-compat__items">
+    {% if browserCompat.browsers and browserCompat.browsers.length -%}
+    {% for browser in browserCompat.browsers -%}
+    <span class="wdi-browser-compat__icon">
+      {{- browser.browserIcon|safe -}}
+      <span class="visually-hidden">{{ browser.ariaLabel }}</span>
+    </span>
+    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}">
+      {{- browser.supportIcon -}}
+    </span>
+    {%- endfor %}
+    {%- endif %}
+  </span>
+  {% if browserCompat.source -%}
+  <a class="wdi-browser-compat__link" href="{{ browserCompat.source }}#browser_compatibility" target="_blank">
+    {{- browserCompat.sourceLabel -}}
+  </a>
+  {%- endif %}
+</div>
