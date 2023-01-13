@@ -123,7 +123,7 @@ function getRenderContext(locale, featureDetails, originTrialId) {
     if (originTrialId) {
       context.steps.origin_trial.url = `${ORIGIN_TRIAL_VIEW_URL}/${originTrialId}`;
     }
-  } else {
+  } else if (originTrialId || featureDetails.ot_milestone_desktop_end) {
     // If the author explicitly gave an origin trial id, but that's not
     // the browser status anymore, it probably means the OT is over
     setStatus(context.steps.origin_trial, STATUS_KEY_COMPLETED, locale);
