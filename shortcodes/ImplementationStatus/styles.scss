@@ -1,0 +1,75 @@
+.wdi-impl-status {
+  --wdi-highlight-color: #DADCE0;
+  padding: 20px 45px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  &__item {
+    display: flex;
+    align-items: center;
+
+    &:last-child {
+
+      .wdi-impl-status__text {
+        border: none;
+      }
+
+      .wdi-impl-status__icon:after {
+        display: none;
+      }
+    }
+  }
+  
+  &__icon {
+    position: relative;
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+    margin-right: 1em;
+    background-color: var(--wdi-highlight-color);
+    background-repeat: no-repeat no-repeat;
+    background-position: center center;
+    background-size: 40%;
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 20'%3E%3Cpath d='M.3 0v6l4 4-4 4v6h12v-6l-4-4 4-4V0H.3Zm10 14.5V18h-8v-3.5l4-4 4 4Zm-4-5-4-4V2h8v3.5l-4 4Z' fill='%23fff'/%3E%3C/svg%3E");
+    
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -1.25em;
+      left: 1.5em;
+      width: 0.25em;
+      height: 0.25em;
+      border-radius: 50%;
+      background-color: var(--wdi-highlight-color);
+    }
+    
+        
+    &.--completed {
+      --wdi-highlight-color: #188038;
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 14'%3E%3Cpath d='M6.3 11.2 2.1 7 .7 8.4 6.3 14l12-12L16.9.6 6.3 11.2Z' fill='%23fff'/%3E%3C/svg%3E");
+    }
+    
+    &.--in-progress {
+      --wdi-highlight-color: #F29900;
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 22'%3E%3Cpath d='M8.3 5v3l4-4-4-4v3a8 8 0 0 0-6.8 12.3L3 13.8A6 6 0 0 1 8.3 5Zm6.8 1.7-1.5 1.5A6 6 0 0 1 8.3 17v-3l-4 4 4 4v-3a8 8 0 0 0 6.8-12.3Z' fill='%23fff'/%3E%3C/svg%3E");
+    }
+  }
+  
+  &__text {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 2em 0;
+    border-bottom: 1px solid lightgrey;
+  }
+  
+  &__label {
+    margin-right: auto;
+  }
+}
