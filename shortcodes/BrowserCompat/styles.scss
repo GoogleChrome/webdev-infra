@@ -23,6 +23,10 @@
     margin: 1rem 1rem 1rem 0;
   }
 
+  /** The data-urls for the background-images are derived from the SVGs in the
+   *  ./icons directory. The SVGs are inlined here to avoid an extra
+   *  HTTP request and to avoid repeating the same icon in the output HTML
+   */
   &__icon {
     background-repeat: no-repeat no-repeat;
     background-position: center center;
