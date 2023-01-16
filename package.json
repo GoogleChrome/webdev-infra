@@ -1,6 +1,6 @@
 {
   "name": "webdev-infra",
-  "version": "1.0.41",
+  "version": "1.0.42",
   "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
   "engines": {
