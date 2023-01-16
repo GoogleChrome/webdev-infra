@@ -36,7 +36,7 @@ class I18nDictionary {
     this.data = {};
 
     if (defaultPath) {
-      this.load(path.join(defaultPath));
+      this.loadEntries(path.join(defaultPath));
     }
   }
 
@@ -45,11 +45,14 @@ class I18nDictionary {
    * nested object out of the file tree, including the file contents
    * For example: _data/i18n/foo/bar/baz.yml would produce:
    * {foo: {bar: baz: { <baz.yml contents> }}}
+   *
+   * Can be called multiple times to load translations from various
+   * sources. The latest call overwrites potentially existing keys.
+   *
    * @param {string} dir The directory to walk
    */
-  load(dir) {
+  loadEntries(dir) {
     const files = fg.sync(path.join(dir, '/**/*.{yml,yaml}'));
-    const entries = {};
 
     const baseDir = path.dirname(dir);
     for (const file of files) {
@@ -64,10 +67,8 @@ class I18nDictionary {
         .slice(1)
         .split('/')
         .join('.')}.${name}`;
-      set(entries, keyPath, yaml.load(fs.readFileSync(file, 'utf-8')));
+      set(this.data, keyPath, yaml.load(fs.readFileSync(file, 'utf-8')));
     }
-
-    Object.assign(this.data, entries);
   }
 
   /**

@@ -34,7 +34,7 @@ class I18nFilter {
 
     if (Array.isArray(config.dictPaths)) {
       for (const path of config.dictPaths) {
-        i18nDictionary.load(path);
+        i18nDictionary.loadEntries(path);
       }
     }
 
