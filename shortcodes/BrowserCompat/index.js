@@ -31,13 +31,6 @@ const DATA = bcd();
 const TEMPLATE = new Nunjucks.Template(
   fs.readFileSync(path.join(__dirname, 'template.njk'), {encoding: 'utf-8'})
 );
-const ICONS = BROWSERS.reduce((icons, browser) => {
-  icons[browser] = fs.readFileSync(
-    path.join(__dirname, `icons/${browser}.svg`),
-    {encoding: 'utf-8'}
-  );
-  return icons;
-}, {});
 
 /**
  * @param {mdnBcd.SimpleSupportStatement} support
@@ -134,7 +127,6 @@ function BrowserCompat(feature) {
         ariaLabel,
         compat: supportInfo.compatProperty,
         supportIcon: supportInfo.icon,
-        browserIcon: ICONS[browser],
       };
     });
 
