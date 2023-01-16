@@ -23,7 +23,7 @@ const mdnBcd = require('@mdn/browser-compat-data');
 const Nunjucks = require('nunjucks');
 
 const bcd = require('../../utils/browserCompat');
-const {i18n} = require('../../utils/dictionary');
+const {i18n} = require('../../utils/i18nDictionary');
 
 const BROWSERS = ['chrome', 'firefox', 'edge', 'safari'];
 const DATA = bcd();
