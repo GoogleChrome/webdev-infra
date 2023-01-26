@@ -14,7 +14,12 @@
     display: flex;
     align-items: center;
 
+    &:first-child {
+      margin-top: -1.5em;
+    }
+
     &:last-child {
+      margin-bottom: -1.5em;
 
       .wdi-impl-status__text {
         border: none;
@@ -29,8 +34,8 @@
   &__icon {
     position: relative;
     border-radius: 50%;
-    width: 3em;
-    height: 3em;
+    width: 1.5em;
+    height: 1.5em;
     margin-right: 1em;
     background-color: var(--wdi-highlight-color);
     background-repeat: no-repeat no-repeat;
@@ -42,7 +47,7 @@
       content: "";
       position: absolute;
       bottom: -1.25em;
-      left: 1.5em;
+      left: 0.5em;
       width: 0.25em;
       height: 0.25em;
       border-radius: 50%;
@@ -65,7 +70,8 @@
     flex: 1 0 auto;
     display: flex;
     justify-content: space-between;
-    padding: 2em 0;
+    padding: 1.5rem;
+    padding-right: 0;
     border-bottom: 1px solid lightgrey;
   }
   
