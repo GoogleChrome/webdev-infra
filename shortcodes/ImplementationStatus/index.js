@@ -19,7 +19,7 @@ const path = require('path');
 const EleventyFetch = require('@11ty/eleventy-fetch');
 const Nunjucks = require('nunjucks');
 
-const {i18n} = require('../../utils/dictionary');
+const {i18n} = require('../../utils/i18nDictionary');
 
 const CACHE_TIMEOUT = '3h';
 
