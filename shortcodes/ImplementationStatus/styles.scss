@@ -1,6 +1,6 @@
 .wdi-impl-status {
   --wdi-highlight-color: #DADCE0;
-  padding: 20px 45px;
+  padding: 1.5rem;
   border: 1px solid #dadce0;
   border-radius: 8px;
   
@@ -11,6 +11,7 @@
   }
   
   &__item {
+    position: relative;
     display: flex;
     align-items: center;
 
@@ -32,9 +33,10 @@
   }
   
   &__icon {
-    position: relative;
     border-radius: 50%;
+    flex: 1 0 auto;
     width: 1.5em;
+    max-width: 1.5em;
     height: 1.5em;
     margin-right: 1em;
     background-color: var(--wdi-highlight-color);
@@ -46,7 +48,7 @@
     &:after {
       content: "";
       position: absolute;
-      bottom: -1.25em;
+      bottom: 0;
       left: 0.5em;
       width: 0.25em;
       height: 0.25em;
@@ -67,15 +69,29 @@
   }
   
   &__text {
-    flex: 1 0 auto;
     display: flex;
+    width: 100%;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 1.5rem;
-    padding-right: 0;
+    padding: 1.5rem 0;
+    margin-left: 1.5em;
     border-bottom: 1px solid lightgrey;
+
+    @include media-query('lg') {
+      flex-direction: row;
+      flex: 1 0 auto;
+      width: auto;
+    }
   }
   
   &__label {
     margin-right: auto;
+    margin-top: 0.5em;
+  }
+
+  &__link {
+    &:not(a) {
+      font-weight: bold;
+    }
   }
 }
