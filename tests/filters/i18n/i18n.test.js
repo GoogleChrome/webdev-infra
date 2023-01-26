@@ -17,10 +17,10 @@
 const test = require('ava').default;
 const path = require('path');
 
-const {i18nFilter} = require('../../../filters/i18n');
+const {I18nFilter} = require('../../../filters/i18n');
 
 test.before(t => {
-  const i18n = new i18nFilter().configure({
+  const i18n = new I18nFilter().configure({
     defaultLocale: 'en',
     dictPaths: [path.join(__dirname, 'data')],
   });

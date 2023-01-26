@@ -23,7 +23,7 @@ const mdnBcd = require('@mdn/browser-compat-data');
 const Nunjucks = require('nunjucks');
 
 const bcd = require('../../utils/browserCompat');
-const {i18n} = require('../../utils/dictionary');
+const {i18n} = require('../../utils/i18nDictionary');
 
 const BROWSERS = ['chrome', 'firefox', 'edge', 'safari'];
 const DATA = bcd();
@@ -31,13 +31,6 @@ const DATA = bcd();
 const TEMPLATE = new Nunjucks.Template(
   fs.readFileSync(path.join(__dirname, 'template.njk'), {encoding: 'utf-8'})
 );
-const ICONS = BROWSERS.reduce((icons, browser) => {
-  icons[browser] = fs.readFileSync(
-    path.join(__dirname, `icons/${browser}.svg`),
-    {encoding: 'utf-8'}
-  );
-  return icons;
-}, {});
 
 /**
  * @param {mdnBcd.SimpleSupportStatement} support
@@ -134,7 +127,6 @@ function BrowserCompat(feature) {
         ariaLabel,
         compat: supportInfo.compatProperty,
         supportIcon: supportInfo.icon,
-        browserIcon: ICONS[browser],
       };
     });
 

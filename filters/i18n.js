@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-const {dictionary} = require('../utils/dictionary');
+const {i18nDictionary} = require('../utils/i18nDictionary');
 
-class i18nFilter {
+class I18nFilter {
   /**
    *
    * @param {{
@@ -34,7 +34,7 @@ class i18nFilter {
 
     if (Array.isArray(config.dictPaths)) {
       for (const path of config.dictPaths) {
-        dictionary.load(path);
+        i18nDictionary.loadEntries(path);
       }
     }
 
@@ -49,9 +49,9 @@ class i18nFilter {
    */
   filter(keyPath, locale) {
     if (this.defaultLocale) {
-      return dictionary.get(keyPath, locale, this.defaultLocale);
+      return i18nDictionary.get(keyPath, locale, this.defaultLocale);
     }
   }
 }
 
-module.exports = {i18nFilter};
+module.exports = {I18nFilter};

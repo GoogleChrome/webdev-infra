@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * @fileoverview A class that makes translations, maintained in distinct,
+ * feature scoped YAML files, available via simple JSON path notation, so
+ * a string that is maintained in a file called _data/i18n/foo/bar/baz.yml
+ * can be translated by calling: dictionary.get('foo.bar.baz', 'de')
+ */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -22,11 +29,15 @@ const yaml = require('js-yaml');
 const get = require('lodash.get');
 const set = require('lodash.set');
 
-class Dictionary {
-  constructor() {
+const DEFAULT_PATH = path.join(__dirname, '../data/i18n');
+
+class I18nDictionary {
+  constructor(defaultPath = DEFAULT_PATH) {
     this.data = {};
 
-    this.load(path.join(__dirname, '../data/i18n'));
+    if (defaultPath) {
+      this.loadEntries(path.join(defaultPath));
+    }
   }
 
   /**
@@ -34,11 +45,14 @@ class Dictionary {
    * nested object out of the file tree, including the file contents
    * For example: _data/i18n/foo/bar/baz.yml would produce:
    * {foo: {bar: baz: { <baz.yml contents> }}}
+   *
+   * Can be called multiple times to load translations from various
+   * sources. The latest call overwrites potentially existing keys.
+   *
    * @param {string} dir The directory to walk
    */
-  load(dir) {
+  loadEntries(dir) {
     const files = fg.sync(path.join(dir, '/**/*.{yml,yaml}'));
-    const entries = {};
 
     const baseDir = path.dirname(dir);
     for (const file of files) {
@@ -53,10 +67,8 @@ class Dictionary {
         .slice(1)
         .split('/')
         .join('.')}.${name}`;
-      set(entries, keyPath, yaml.load(fs.readFileSync(file, 'utf-8')));
+      set(this.data, keyPath, yaml.load(fs.readFileSync(file, 'utf-8')));
     }
-
-    Object.assign(this.data, entries);
   }
 
   /**
@@ -84,12 +96,12 @@ class Dictionary {
   }
 }
 
-const dictionary = new Dictionary();
+const i18nDictionary = new I18nDictionary();
 
 module.exports = {
-  Dictionary,
-  dictionary,
+  I18nDictionary,
+  i18nDictionary,
   i18n: (keyPath, locale, defaultLocale = 'en') => {
-    return dictionary.get(keyPath, locale, defaultLocale);
+    return i18nDictionary.get(keyPath, locale, defaultLocale);
   },
 };

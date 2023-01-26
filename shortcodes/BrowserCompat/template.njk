@@ -3,8 +3,7 @@
   <span class="wdi-browser-compat__items">
     {% if browserCompat.browsers and browserCompat.browsers.length -%}
     {% for browser in browserCompat.browsers -%}
-    <span class="wdi-browser-compat__icon">
-      {{- browser.browserIcon|safe -}}
+    <span class="wdi-browser-compat__icon" data-browser="{{ browser.name }}">
       <span class="visually-hidden">{{ browser.ariaLabel }}</span>
     </span>
     <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}">
