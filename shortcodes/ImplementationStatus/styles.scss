@@ -55,7 +55,10 @@
       border-radius: 50%;
       background-color: var(--wdi-highlight-color);
     }
-    
+
+    &.--skipped {
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 15'%3E%3Cpath fill='%23fff' d='m12 0 2 2L2 14l-2-2z'/%3E%3C/svg%3E");
+    }
         
     &.--completed {
       --wdi-highlight-color: #188038;
@@ -86,10 +89,15 @@
   
   &__label {
     margin-right: auto;
-    margin-top: 0.5em;
   }
 
   &__link {
+    margin-top: 0.5em;
+
+    @include media-query('lg') {
+      margin-top: 0em;
+    }
+
     &:not(a) {
       font-weight: bold;
     }

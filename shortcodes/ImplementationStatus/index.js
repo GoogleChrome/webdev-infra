@@ -27,13 +27,16 @@ const CHROME_STATUS_API_URL = 'https://chromestatus.com/api/v0/features/';
 const CHROME_STATUS_ORIGIN_TRIAL = 8;
 const CHROME_STATUS_BEHIND_FLAG = 4;
 const CHROME_STATUS_ENABLED_BY_DEFAULT = 5;
+const CHROME_STATUS_STAGE_ORIGIN_TRIAL = 150;
 
 const ORIGIN_TRIAL_LIST_URL =
   'https://developer.chrome.com/origintrials/#/trials/active';
 const ORIGIN_TRIAL_VIEW_URL =
   'https://developer.chrome.com/origintrials/#/view_trial';
 
-const STATUS_KEY_IN_PROGRESS = 'in-progress';
+const STATUS_KEY_SKIPPED = 'skipped';
+const STATUS_KEY_IN_PROGRESS = 'in_progress';
+const STATUS_KEY_BEHIND_FLAG = 'skipped';
 const STATUS_KEY_COMPLETED = 'completed';
 
 const TEMPLATE = new Nunjucks.Template(
@@ -42,9 +45,9 @@ const TEMPLATE = new Nunjucks.Template(
 
 /**
  * @param {string} featureId
- * @returns {Promise<{aria: string, compatProperty: string, icon: string}>}}
+ * @returns {Promise<ChromeStatusFeature>}
  */
-async function fetchFeatureDetails(featureId) {
+async function fetchFeature(featureId) {
   let data = await EleventyFetch(`${CHROME_STATUS_API_URL}/${featureId}`, {
     duration: CACHE_TIMEOUT,
     type: 'text',
@@ -59,44 +62,103 @@ async function fetchFeatureDetails(featureId) {
   return data;
 }
 
-function setStatus(step, statusKey, locale) {
-  step.statusKey = statusKey;
-  if (statusKey === STATUS_KEY_COMPLETED) {
-    step.status = i18n('i18n.implementation_status.completed', locale);
-  } else if (statusKey === STATUS_KEY_IN_PROGRESS) {
-    step.status = i18n('i18n.implementation_status.in_progress', locale);
+/**
+ *
+ * @param {ImplementationStatusSteps} steps
+ * @param {ChromeStatusFeature} feature
+ */
+function getSpecStatus(steps, feature) {
+  const spec = {
+    label: 'i18n.implementation_status.create_spec',
+  };
+
+  if (feature.spec_link) {
+    spec.url = feature.spec_link;
+
+    // Is there already a spec, but no explainer? Then the
+    // explainer step has likely been skipped.
+    if (steps.explainer) {
+      steps.explainer.status = STATUS_KEY_SKIPPED;
+    }
   }
+
+  return spec;
 }
 
-function getRenderContext(locale, featureDetails, originTrialId) {
+/**
+ *
+ * @param {ImplementationStatusSteps} steps
+ * @param {ChromeStatusFeature} feature
+ */
+function getExplainerStatus(steps, feature) {
+  const explainer = {
+    label: 'i18n.implementation_status.create_explainer',
+  };
+
+  if (feature.explainer_links && feature.explainer_links.length) {
+    explainer.url = feature.explainer_links[0];
+    explainer.status = STATUS_KEY_COMPLETED;
+  }
+
+  return explainer;
+}
+
+/**
+ *
+ * @param {ImplementationStatusSteps} steps
+ * @param {ChromeStatusFeature} feature
+ */
+function getOriginTrialStatus(steps, feature) {
+  const originTrial = {
+    label: 'i18n.implementation_status.origin_trial',
+  };
+
+
+
+  return originTrial;
+}
+
+/**
+ *
+ * @param {ShortcodeContext['ctx']} pageContext The full render context of the 11ty page
+ * @param {ChromeStatusFeature} feature Feature details from Chrome Status API
+ * @param {string} originTrialId A valid origin trial ID
+ * @returns {ImplementationStatusSteps}
+ */
+function getRenderContext(pageContext, feature, originTrialId) {
+  // Note, name and motivation will never be localized as they are
+  // coming from the Chrome Status API, which is English only
   const context = {
-    name: featureDetails.name,
-    motivation: featureDetails.motivation,
-    steps: {},
+    name: feature.name,
+    motivation: feature.motivation,
   };
 
-  // Add information about a potential explainer doc. This
-  // step in the process is either started or not started
-  context.steps.explainer = {
-    label: i18n('i18n.implementation_status.create_explainer', locale),
-    status: i18n('i18n.implementation_status.not_started', locale),
+  const steps = {};
+  steps.spec = getSpecStatus(steps, feature);
+  steps.explainer = getExplainerStatus(steps, feature);
+  // Feedback is simple: it's always in progress, as long as the feature
+  // has not yet fully launched
+  steps.feedback = {
+    label: 'i18n.implementation_status.feedback',
+    status: STATUS_KEY_IN_PROGRESS,
   };
-  if (featureDetails.explainer_links && featureDetails.explainer_links.length) {
-    context.steps.explainer.url = featureDetails.explainer_links[0];
-    setStatus(context.steps.explainer, STATUS_KEY_COMPLETED, locale);
+  steps.originTrial = getOriginTrialStatus(steps, feature);
+
+  // Actually translate labels and status keys to human readable strings
+  // in the locale of the surrounding page
+  const locale = pageContext.locale;
+  for (const [stepName, step] of Object.entries(steps)) {
+    const label = step.label;
+    const status = step.status;
+    steps[stepName].label = i18n(label, locale);
+    steps[stepName].status = i18n(
+      `i18n.implementation_status.${status}`,
+      locale
+    );
   }
 
-  // Add initial draft or spec information, there is another key
-  // standards with a list of spec docs rated by maturity that could
-  // be used here alternatively
-  context.steps.spec = {
-    label: i18n('i18n.implementation_status.create_spec', locale),
-    status: i18n('i18n.implementation_status.not_started', locale),
-  };
-  if (featureDetails.spec_link) {
-    setStatus(context.steps.spec, STATUS_KEY_COMPLETED, locale);
-    context.steps.spec.url = featureDetails.spec_link;
-  }
+  context.steps = steps;
+  return context;
 
   // Link to feedback section - assume the feature is ready for feedback
   // as soon as there is a explainer and a spec
@@ -115,15 +177,13 @@ function getRenderContext(locale, featureDetails, originTrialId) {
     label: i18n('i18n.implementation_status.origin_trial', locale),
     status: i18n('i18n.implementation_status.not_started', locale),
   };
-  if (
-    featureDetails.browsers?.chrome?.status?.val === CHROME_STATUS_ORIGIN_TRIAL
-  ) {
+  if (feature.browsers?.chrome?.status?.val === CHROME_STATUS_ORIGIN_TRIAL) {
     setStatus(context.steps.origin_trial, STATUS_KEY_IN_PROGRESS, locale);
     context.steps.origin_trial.url = ORIGIN_TRIAL_LIST_URL;
     if (originTrialId) {
       context.steps.origin_trial.url = `${ORIGIN_TRIAL_VIEW_URL}/${originTrialId}`;
     }
-  } else if (originTrialId || featureDetails.ot_milestone_desktop_end) {
+  } else if (originTrialId || feature.ot_milestone_desktop_end) {
     // If the author explicitly gave an origin trial id, but that's not
     // the browser status anymore, it probably means the OT is over
     setStatus(context.steps.origin_trial, STATUS_KEY_COMPLETED, locale);
@@ -133,10 +193,10 @@ function getRenderContext(locale, featureDetails, originTrialId) {
     label: i18n('i18n.implementation_status.launch', locale),
     status: i18n('i18n.implementation_status.not_started', locale),
   };
-  if (featureDetails.intent_stage === 'Prepare to ship') {
+  if (feature.intent_stage === 'Prepare to ship') {
     setStatus(context.steps.launch, STATUS_KEY_IN_PROGRESS, locale);
   } else if (
-    featureDetails.browsers?.chrome?.status?.val === CHROME_STATUS_BEHIND_FLAG
+    feature.browsers?.chrome?.status?.val === CHROME_STATUS_BEHIND_FLAG
   ) {
     setStatus(context.steps.launch, STATUS_KEY_COMPLETED, locale);
     context.steps.launch.status = i18n(
@@ -144,8 +204,7 @@ function getRenderContext(locale, featureDetails, originTrialId) {
       locale
     );
   } else if (
-    featureDetails.browsers?.chrome?.status?.val ===
-    CHROME_STATUS_ENABLED_BY_DEFAULT
+    feature.browsers?.chrome?.status?.val === CHROME_STATUS_ENABLED_BY_DEFAULT
   ) {
     setStatus(context.steps.launch, STATUS_KEY_COMPLETED, locale);
 
@@ -156,7 +215,7 @@ function getRenderContext(locale, featureDetails, originTrialId) {
 
     console.warn(
       '[ImplementationStatus]',
-      featureDetails.name,
+      feature.name,
       'has launched and might be replaced by a BrowserCompat widget.'
     );
   }
@@ -170,9 +229,9 @@ function getRenderContext(locale, featureDetails, originTrialId) {
  * @param {string} originTrialId
  */
 async function ImplementationStatus(featureId, originTrialId) {
-  let featureDetails = null;
+  let feature = null;
   try {
-    featureDetails = await fetchFeatureDetails(featureId);
+    feature = await fetchFeature(featureId);
   } catch (e) {
     console.error(e);
     throw new Error(
@@ -181,8 +240,7 @@ async function ImplementationStatus(featureId, originTrialId) {
     );
   }
 
-  const locale = this.ctx.locale;
-  const renderContext = getRenderContext(locale, featureDetails, originTrialId);
+  const renderContext = getRenderContext(this.ctx, feature, originTrialId);
 
   return TEMPLATE.render({implStatus: renderContext});
 }
