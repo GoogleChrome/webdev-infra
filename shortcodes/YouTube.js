@@ -23,11 +23,12 @@ const {html} = require('common-tags');
  * in order to use this shortcode.
  *
  * @param {string|import('types').YouTubeArgs} args
+ * @param {string|number} [option]
  * @return {string}
  */
-const YouTube = args => {
+function YouTube(args, option) {
   if (typeof args === 'string') {
-    args = {id: args};
+    args = {id: args, startTime: option};
   }
 
   const {id, startTime} = args;
@@ -45,6 +46,6 @@ const YouTube = args => {
       </lite-youtube>
     </div>
   `.replace(/\n/g, '');
-};
+}
 
 module.exports = {YouTube};
