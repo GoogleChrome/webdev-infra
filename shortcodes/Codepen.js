@@ -62,7 +62,7 @@ function Codepen(param) {
   };
 
   const src = `${url}?${stringify(queryParams)}`;
-  const fallback = `See the Pen <a href="${url}">`;
+  const fallback = `See the Pen <a href="${url}">${title}</a>`;
 
   return `<div class="codepen-embed-wrap" style="height: ${height}px; width: ${frameWidth}">
 ${iframe({src, title, allow: frameAllow, fallback})}</div>`;
