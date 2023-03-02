@@ -18,7 +18,7 @@ const {html} = require('common-tags');
 
 /**
  *
- * @param {string | {src: string; allow?: string; style?: string; title?: string;}} param
+ * @param {string | {src: string; allow?: string; style?: string; title?: string; fallback?: string;}} param
  * @return string
  */
 module.exports = param => {
@@ -27,6 +27,7 @@ module.exports = param => {
     src: '',
     style: 'height: 100%; width: 100%; border: 0;',
     title: 'IFrame content',
+    fallback: '',
   };
 
   if (typeof param === 'string') {
@@ -48,6 +49,6 @@ module.exports = param => {
       src="${src}"
       style="${style}"
       title="${title}"
-    ></iframe>
+    >${iframeProps.fallback}</iframe>
   `;
 };
