@@ -49,6 +49,7 @@ module.exports = param => {
       src="${src}"
       style="${style}"
       title="${title}"
-    >${iframeProps.fallback}</iframe>
+      >${iframeProps.fallback}</iframe
+    >
   `;
 };
