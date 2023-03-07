@@ -19,6 +19,7 @@ const {createMocks} = require('node-mocks-http');
 const EventEmitter = require('events');
 const response = require('express/lib/response');
 const fs = require('fs');
+const UrlCrawlResult = require('./UrlCrawlResult');
 
 // matches <body>...</body>
 const HTML_BODY_REGEX = /<body(?:\s+[^>]+)?>(.*)<\/body>/is;
@@ -29,101 +30,9 @@ const HTML_HREF_ELEMENT_REGEX = /<(a|area)\s.+?>.+?(?=>)\/?>/gi;
 // matches href="..."/'...' (backslash escape aware) or href=...
 const HTML_HREF_ATTRIBUTE_REGEX = /href=("(?:\\["\\]|[^"\\]+)*"|'(?:\\['\\]|[^'\\]+)*'|[^\s>]+)/gi;
 
-class UrlCrawlResult {
-  constructor() {
-    this.scannedUrls = {};
-    this.scanCount = 0;
-    /** @type {ScanError[]} */
-    this.errors = [];
-
-    this.startTime = Date.now();
-  }
-
-  get errorCount() {
-    return this.errors.length;
-  }
-
-  incrementScanCount() {
-    this.scanCount++;
-  }
-
-  getScanDuration() {
-    return `${(Date.now() - this.startTime) / 1000}s`;
-  }
-
-  summaryToConsole() {
-    const errorCategories = {};
-    for (const error of this.errors) {
-      const key = `${error.statusCode} ${error.summary}`;
-      if (errorCategories[key] === undefined) {
-        errorCategories[key] = [];
-      }
-
-      errorCategories[key].push(error);
-    }
-
-    /**
-     * @param {number} number
-     * @returns {string}
-     */
-    function formatNumber(number) {
-      return number.toLocaleString('en-GB');
-    }
-
-    const errorCount = this.errorCount;
-    const summary = [
-      '',
-      '=== Summary ===',
-      `Scanned ${formatNumber(
-        this.scanCount
-      )} URLs in ${this.getScanDuration()}`,
-      '',
-      'Error Summary',
-      Object.entries(errorCategories)
-        .map(
-          ([key, errors]) =>
-            `  ${chalk[errors[0].statusCode === 200 ? 'green' : 'red'].bold(
-              key
-            )}: ${formatNumber(errors.length)}`
-        )
-        .join('\n'),
-      '',
-      'Totals',
-      `  Errors: ${formatNumber(errorCount)}`,
-      `  Pass: ${formatNumber(this.scanCount - errorCount)}`,
-      '',
-    ];
-
-    console.log(summary.join('\n'));
-  }
-
-  toJson(shouldPrettyPrint = false) {
-    return JSON.stringify(
-      {
-        scanDuration: this.getScanDuration(),
-        scanCount: this.scanCount,
-        errorCount: this.errorCount,
-        scannedUrls: this.scannedUrls,
-        errors: this.errors,
-      },
-      null,
-      shouldPrettyPrint ? 2 : 0
-    );
-  }
-}
-
-/**
- * @typedef {Object} UrlCrawlOptions
- * @property {boolean} [shouldNormalizeTrailingSlash=true]
- * @property {boolean} [shouldDisableDuplicateUrls=true]
- * @property {(error: ScanError) => string} [onErrorOutput=() => string]
- * @property {import('express').RequestHandler[]} [handlers=[]]
- * @property {boolean} [shouldDetectSuperstatic=true]
- */
-
-class UrlCrawl {
+module.exports = class UrlCrawl {
   /**
-   * @param {UrlCrawlOptions?} options
+   * @param {import('types/utils/url-crawl').UrlCrawlOptions?} options
    */
   constructor(options) {
     this.shouldNormalizeTrailingSlash =
@@ -135,6 +44,8 @@ class UrlCrawl {
     this.handlers = options?.handlers ?? [];
 
     if (options?.shouldDetectSuperstatic !== false) {
+      // disabled eslint-rule because superstatic is read from the executing package
+      // eslint-disable-next-line node/no-missing-require
       const superstaticModulePath = require.resolve('superstatic', {
         paths: [process.cwd()],
       });
@@ -450,9 +361,4 @@ class UrlCrawl {
       await onUrl(parsedUrl, match[1]);
     }
   }
-}
-
-module.exports = {
-  UrlCrawl,
-  UrlCrawlResult,
 };
