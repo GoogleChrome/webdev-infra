@@ -105,25 +105,28 @@ module.exports = class UrlCrawl {
    * @returns {Promise<import('express').Response>}
    */
   simulateExpressPath(urlPath) {
+    const {req, res} = createMocks(
+      {
+        method: 'GET',
+        url: urlPath,
+      },
+      {
+        eventEmitter: EventEmitter,
+      }
+    );
+
+    // as data is written to the stream, store it in body to be used by the crawler
+    let body = '';
+    Object.assign(res, response, {
+      req,
+      write(data) {
+        body += data.toString();
+      },
+    });
+
     return new Promise(resolve => {
-      const {req, res} = createMocks(
-        {
-          method: 'GET',
-          url: urlPath,
-        },
-        {
-          eventEmitter: EventEmitter,
-        }
-      );
-
-      let body = '';
-      Object.assign(res, response, {
-        req,
-        write(data) {
-          body += data.toString();
-        },
-      });
-
+      // the stream has been signaled there's no more data, time to give all the collected data to
+      // the crawler
       res.on('end', () => {
         res.content = body;
         resolve(res);
