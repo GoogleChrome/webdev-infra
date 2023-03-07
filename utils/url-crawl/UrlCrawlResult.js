@@ -84,17 +84,17 @@ module.exports = class UrlCrawlResult {
     console.log(summary.join('\n'));
   }
 
+  toObject() {
+    return {
+      scanDuration: this.getScanDuration(),
+      scanCount: this.scanCount,
+      errorCount: this.errorCount,
+      scannedUrls: this.scannedUrls,
+      errors: this.errors,
+    };
+  }
+
   toJson(shouldPrettyPrint = false) {
-    return JSON.stringify(
-      {
-        scanDuration: this.getScanDuration(),
-        scanCount: this.scanCount,
-        errorCount: this.errorCount,
-        scannedUrls: this.scannedUrls,
-        errors: this.errors,
-      },
-      null,
-      shouldPrettyPrint ? 2 : 0
-    );
+    return JSON.stringify(this.toObject(), null, shouldPrettyPrint ? 2 : 0);
   }
 };
