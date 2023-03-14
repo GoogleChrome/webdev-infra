@@ -18,9 +18,15 @@
   }
 
   &__items {
-    align-items: center;
     display: flex;
     margin: 1rem 1rem 1rem 0;
+    list-style: none;
+  }
+
+  &__item {
+    align-items: center;
+    display: flex;
+    justify-content: center;
   }
 
   /** The data-urls for the background-images are derived from the SVGs in the
