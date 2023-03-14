@@ -45,10 +45,23 @@ module.exports = class UrlCrawl {
 
     if (options?.shouldDetectSuperstatic !== false) {
       // disabled eslint-rule because superstatic is read from the executing package
-      // eslint-disable-next-line node/no-missing-require
-      const superstaticModulePath = require.resolve('superstatic', {
-        paths: [process.cwd()],
-      });
+      let superstaticModulePath = null;
+      try {
+        // eslint-disable-next-line node/no-missing-require
+        superstaticModulePath = require.resolve('superstatic', {
+          paths: [process.cwd()],
+        });
+      } catch (e) {
+        if (
+          e instanceof Error &&
+          /** @type {Error & {
+            code: string
+          }} */ (e)
+            .code !== 'MODULE_NOT_FOUND'
+        ) {
+          throw e;
+        }
+      }
 
       if (superstaticModulePath !== null) {
         this.debug(
