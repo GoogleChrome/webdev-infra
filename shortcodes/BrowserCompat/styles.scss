@@ -57,13 +57,14 @@
 
   &__version {
     --size-2: clamp(0.75rem, 0.71rem + 0.18vw, 0.875rem); // From web.dev
-    border-radius: 100%;
+    border-radius: 1e4px;
     display: inline-block;
     font-size: var(--size-2);
     height: 20px;
     line-height: 20px;
     min-width: 20px;
     text-align: center;
+    padding-inline: .5ch;
   
     &[data-compat='yes'] {
       background: var(--wdi-success-bg-color, #e9f6ed);
