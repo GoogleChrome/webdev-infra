@@ -33,7 +33,7 @@ const TEMPLATE = new Nunjucks.Template(
 );
 
 /**
- * @param {mdnBcd.SimpleSupportStatement} support
+ * @param {mdnBcd.SimpleSupportStatement | undefined} support
  * @param {mdnBcd.StatusBlock | undefined} status
  * @returns {{aria: string, compatProperty: string, icon: string}}}
  */
@@ -46,7 +46,7 @@ function getInfoFromSupportStatement(support, status, locale) {
     };
   }
 
-  if (!support.version_removed) {
+  if (support && !support.version_removed) {
     if (support.version_added === 'preview') {
       return {
         aria: i18n('i18n.browser_compat.preview', locale),
@@ -90,9 +90,9 @@ function getInfoFromSupportStatement(support, status, locale) {
 
 /**
  * @this ShortcodeContext
- * @param {*} feature
+ * @param {string} featureId
  */
-function BrowserCompat(feature) {
+function BrowserCompat(featureId) {
   const locale = this.ctx.locale;
   if (!DATA) {
     throw new Error(
@@ -101,41 +101,45 @@ function BrowserCompat(feature) {
   }
 
   const shortcodeContext = {};
-  if (DATA[feature] && DATA[feature].support) {
-    shortcodeContext.browsers = BROWSERS.map(browser => {
-      const support = Array.isArray(DATA[feature].support[browser])
-        ? DATA[feature].support[browser][0]
-        : DATA[feature].support[browser];
+  shortcodeContext.supportLabel = i18n(
+    'i18n.browser_compat.browser_support',
+    locale
+  );
 
-      const supportInfo = getInfoFromSupportStatement(
-        support,
-        DATA[feature].status,
-        locale
-      );
+  const feature = DATA[featureId];
+  shortcodeContext.browsers = BROWSERS.map(browser => {
+    let support = undefined;
+    const status = undefined;
+    if (feature && feature.support) {
+      support = Array.isArray(feature.support[browser])
+        ? feature.support[browser][0]
+        : feature.support[browser];
+    }
 
-      const isSupported = support.version_added && !support.version_removed;
+    const supportInfo = getInfoFromSupportStatement(support, status, locale);
 
-      const ariaLabel = [
-        browser,
-        isSupported ? ` ${support.version_added}, ` : ', ',
-        supportInfo.aria,
-      ].join('');
+    const isSupported = support
+      ? support.version_added && !support.version_removed
+      : false;
 
-      return {
-        name: browser,
-        supportInfo,
-        ariaLabel,
-        compat: supportInfo.compatProperty,
-        supportIcon: supportInfo.icon,
-      };
-    });
+    const ariaLabel = [
+      browser,
+      isSupported ? ` ${support.version_added}, ` : ', ',
+      supportInfo.aria || '',
+    ].join('');
 
-    shortcodeContext.source = DATA[feature].mdn_url;
+    return {
+      name: browser,
+      supportInfo,
+      ariaLabel,
+      compat: supportInfo.compatProperty,
+      supportIcon: supportInfo.icon,
+    };
+  });
+
+  if (feature) {
+    shortcodeContext.source = feature.mdn_url;
     shortcodeContext.sourceLabel = i18n('i18n.browser_compat.source', locale);
-    shortcodeContext.supportLabel = i18n(
-      'i18n.browser_compat.browser_support',
-      locale
-    );
   }
 
   return TEMPLATE.render({browserCompat: shortcodeContext});
