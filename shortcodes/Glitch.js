@@ -15,8 +15,17 @@
  */
 
 const {html} = require('common-tags');
-const {escape, stringify} = require('querystring');
-const iframe = require('./IFrame');
+const IFrame = require('./IFrame');
+
+const DEFAULT_ALLOW = [
+  'camera',
+  'clipboard-read',
+  'clipboard-write',
+  'encrypted-media',
+  'geolocation',
+  'microphone',
+  'midi',
+];
 
 /**
  * Validates allow sources are an array and lower case.
@@ -33,21 +42,12 @@ function expandAllowSource(s) {
 }
 
 /**
+ * Generates HTML for a Glitch embed as a string.
  *
- * @param {string | GlitchParam } param
- * @return string
+ * @param {string|GlitchParam} param
+ * @return {string}
  */
 module.exports = param => {
-  const defaultAllow = [
-    'camera',
-    'clipboard-read',
-    'clipboard-write',
-    'encrypted-media',
-    'geolocation',
-    'microphone',
-    'midi',
-  ];
-
   /** @type GlitchParam */
   let glitchProps = {
     allow: [],
@@ -64,46 +64,40 @@ module.exports = param => {
     glitchProps = {...glitchProps, ...param};
   }
 
-  const {
-    allow: userAllow,
-    id,
-    path,
-    highlights,
-    previewSize,
-    height,
-  } = glitchProps;
-
-  if (!id) {
-    return;
-  }
-  const url = 'https://glitch.com/embed/#!/embed/' + escape(id);
-  const queryParams = {
-    attributionHidden: 'true',
-    sidebarCollapsed: 'true',
-  };
-
-  if (path) {
-    queryParams.path = path;
-  }
-  if (highlights) {
-    queryParams.highlights = highlights;
-  }
-  if (typeof previewSize === 'number') {
-    queryParams.previewSize = previewSize;
+  if (!glitchProps.id) {
+    throw new Error('No `id` provided to Glitch shortcode.');
   }
 
-  let allow = Array.from(new Set([...defaultAllow])).join('; ');
-  if (userAllow) {
+  const url = new URL(`https://glitch.com/embed/#!/embed/${glitchProps.id}`);
+  const searchParams = new URLSearchParams();
+  searchParams.set('attributionHidden', 'true');
+  searchParams.set('sidebarCollapsed', 'true');
+
+  if (glitchProps.path) {
+    searchParams.set('path', glitchProps.path);
+  }
+  if (glitchProps.highlights) {
+    searchParams.set('highlights', glitchProps.highlights);
+  }
+  if (typeof glitchProps.previewSize === 'number') {
+    searchParams.set('previewSize', String(glitchProps.previewSize));
+  }
+
+  let allow = Array.from(new Set([...DEFAULT_ALLOW])).join('; ');
+  if (glitchProps.allow) {
     allow = Array.from(
-      new Set([...defaultAllow, ...expandAllowSource(userAllow)])
+      new Set([...DEFAULT_ALLOW, ...expandAllowSource(glitchProps.allow)])
     ).join('; ');
   }
 
-  const src = `${url}?${stringify(queryParams)}`;
+  const src = `${url.toString()}?${searchParams.toString()}`;
 
   return html`
-    <div class="glitch-embed-wrap" style="height: ${height}px; width: 100%;">
-      ${iframe({src, title: `${escape(id)} on Glitch`, allow})}
+    <div
+      class="glitch-embed-wrap"
+      style="height: ${glitchProps.height}px; width: 100%;"
+    >
+      ${IFrame({src, title: `${glitchProps.id} on Glitch`, allow})}
     </div>
-  `;
+  `.replace(/\s\s+/g, ' ');
 };
