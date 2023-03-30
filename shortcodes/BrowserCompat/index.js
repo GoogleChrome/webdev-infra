@@ -25,7 +25,12 @@ const Nunjucks = require('nunjucks');
 const bcd = require('../../utils/browserCompat');
 const {i18n} = require('../../utils/i18nDictionary');
 
-const BROWSERS = ['chrome', 'firefox', 'edge', 'safari'];
+const BROWSERS = {
+  'chrome': 'Chrome',
+  'firefox': 'Firefox',
+  'edge': 'Edge',
+  'safari': 'Safari'
+};
 const DATA = bcd();
 
 const TEMPLATE = new Nunjucks.Template(
@@ -107,7 +112,7 @@ function BrowserCompat(featureId) {
   );
 
   const feature = DATA[featureId];
-  shortcodeContext.browsers = BROWSERS.map(browser => {
+  shortcodeContext.browsers = Object.keys(BROWSERS).map(browser => {
     let support = undefined;
     const status = undefined;
     if (feature && feature.support) {
@@ -123,7 +128,7 @@ function BrowserCompat(featureId) {
       : false;
 
     const ariaLabel = [
-      browser,
+      BROWSERS[browser],
       isSupported ? ` ${support.version_added}, ` : ', ',
       supportInfo.aria || '',
     ].join('');
