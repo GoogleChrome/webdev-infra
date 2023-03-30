@@ -108,6 +108,7 @@ function BrowserCompat(featureId) {
 
   const feature = DATA[featureId];
   shortcodeContext.browsers = BROWSERS.map(browser => {
+    const friendlyBrowserName = `${browser[0].toUpperCase()}${browser.slice(1)}`;
     let support = undefined;
     const status = undefined;
     if (feature && feature.support) {
@@ -123,13 +124,13 @@ function BrowserCompat(featureId) {
       : false;
 
     const ariaLabel = [
-      browser,
+      friendlyBrowserName,
       isSupported ? ` ${support.version_added}, ` : ', ',
       supportInfo.aria || '',
     ].join('');
 
     return {
-      name: browser,
+      name: friendlyBrowserName,
       supportInfo,
       ariaLabel,
       compat: supportInfo.compatProperty,
