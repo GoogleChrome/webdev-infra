@@ -26,10 +26,10 @@ const bcd = require('../../utils/browserCompat');
 const {i18n} = require('../../utils/i18nDictionary');
 
 const BROWSERS = {
-  'chrome': 'Chrome',
-  'firefox': 'Firefox',
-  'edge': 'Edge',
-  'safari': 'Safari'
+  chrome: 'Chrome',
+  firefox: 'Firefox',
+  edge: 'Edge',
+  safari: 'Safari',
 };
 const DATA = bcd();
 
