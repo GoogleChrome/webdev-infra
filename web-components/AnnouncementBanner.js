@@ -15,48 +15,26 @@
  */
 
 class AnnouncementBanner extends HTMLElement {
-  constructor() {
-    super();
-    this.setAttribute('hidden', '');
-  }
-
   connectedCallback() {
-    if (!this.isBannerDisabled()) {
-      this.removeAttribute('hidden');
-      this.setAttribute('active', '');
-      this.addEventListener('click', e => {
-        if (
-          /** @type {HTMLElement} */ (e.target).closest(
-            '[data-banner-close-btn]'
-          )
-        ) {
-          this.savePreference();
-          this.close();
-        }
-      });
-    }
+    this.setAttribute('active', '');
+    this.addEventListener('click', e => {
+      if (
+        /** @type {HTMLElement} */ (e.target).closest('[data-banner-close-btn]')
+      ) {
+        this.savePreference();
+        this.close();
+      }
+    });
   }
 
-  isBannerDisabled() {
-    const storageKey = this.getAttribute('storage-key');
-    const bannerCtaElement = this.querySelector('a[href]');
-
-    let bannerCtaUrl;
-    let savedBannerCtaUrl;
-
-    if(bannerCtaElement){
-      bannerCtaUrl = bannerCtaElement.getAttribute('href');
-    }
-    if(storageKey){
-      savedBannerCtaUrl = localStorage.getItem(storageKey);
-    }
-
-    return savedBannerCtaUrl === bannerCtaUrl;
-  }
-
+  /*
+   * The logic for the banner auto-hiding when dismissed is handled
+   * in an inline script to avoid an initial flicker of the hidden component.
+   */
   savePreference() {
     const storageKey = this.getAttribute('storage-key') || '';
     const cta = this.querySelector('a[href]');
+
     if (cta) {
       const ctaUrl = cta.getAttribute('href') || '';
       localStorage.setItem(storageKey, ctaUrl);
