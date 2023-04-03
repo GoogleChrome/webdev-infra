@@ -4,10 +4,10 @@
     {% if browserCompat.browsers and browserCompat.browsers.length -%}
     {% for browser in browserCompat.browsers -%}
     <li class="wdi-browser-compat__item">
-    <span class="wdi-browser-compat__icon" data-browser="{{ browser.name }}">
+    <span class="wdi-browser-compat__icon" data-browser="{{ browser.name }}" title="{{ browser.name }}">
       <span class="visually-hidden">{{ browser.ariaLabel }}</span>
     </span>
-    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}">
+    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}" title="{{ browser.supportInfo.aria }}">
       {{- browser.supportIcon -}}
     </span>
     </li>
@@ -15,7 +15,7 @@
     {%- endif %}
   </ul>
   {% if browserCompat.source -%}
-  <a class="wdi-browser-compat__link" href="{{ browserCompat.source }}#browser_compatibility" target="_blank">
+  <a class="wdi-browser-compat__link" href="{{ browserCompat.source }}#browser_compatibility" target="_blank" title="{{ browserCompat.sourceLabel }}">
     {{- browserCompat.sourceLabel -}}
   </a>
   {%- endif %}
