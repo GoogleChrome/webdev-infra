@@ -7,8 +7,9 @@
     <span class="wdi-browser-compat__icon" data-browser="{{ browser.name }}">
       <span class="visually-hidden">{{ browser.ariaLabel }}</span>
     </span>
-    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}" aria-label="{{ browser.supportInfo.aria }}">
+    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}">
       {{- browser.supportIcon -}}
+       <span class="visually-hidden">{{ browser.supportInfo.aria }}</span>
     </span>
     </li>
     {%- endfor %}
