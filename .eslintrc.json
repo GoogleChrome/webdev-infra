@@ -1,5 +1,10 @@
 {
   "extends": ["./node_modules/gts", "plugin:ava/recommended"],
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
   "overrides": [
     {
       "files": ["**/*.js"],
