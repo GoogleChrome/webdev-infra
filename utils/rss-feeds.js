@@ -15,7 +15,7 @@
  */
 
 /**
- * @fileoverview A single method that grabs the title, permalink, date,
+ * @fileoverview Export a single method that grabs the title, permalink, date,
  * and content from the arbitrary XML feeds, normalised and 
  * write a JSON file, containing the feed data needed for the updated author page,
  * to the src/site/_data/ path for both d.c.c and web.dev.
@@ -54,7 +54,7 @@ const sortFeeds = (feeds) => {
 }
 
 /**
- * Grab the title, permalink, date, and content from the XML data.
+ * Extract the permalink from the entry in XML feeds
  * @param {HTMLElement} entry A XML path.
  * @return {string} The permalink
  */
