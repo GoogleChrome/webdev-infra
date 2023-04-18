@@ -46,7 +46,8 @@
     "nunjucks": "3.2.3",
     "piscina": "^3.2.0",
     "purgecss": "5.0.0",
-    "querystring": "^0.2.1"
+    "querystring": "^0.2.1",
+    "striptags": "^3.1.1"
   },
   "peerDependencies": {
     "@mdn/browser-compat-data": "5.2.x"
