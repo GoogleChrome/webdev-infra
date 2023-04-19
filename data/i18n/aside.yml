@@ -115,3 +115,7 @@ tip:
   pt: dica
   ru: совет
   zh: 尖端
+
+key_term:
+  en: 'Key Term'
+  es: 'Término Clave'
