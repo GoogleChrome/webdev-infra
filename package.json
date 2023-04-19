@@ -28,7 +28,6 @@
     "@justinribeiro/lite-youtube": "^0.9.1",
     "@mdn/browser-compat-data": "5.2.x",
     "@swc/html": "0.0.18",
-    "@swc/html-darwin-x64": "0.0.20",
     "async-transforms": "^1.0.9",
     "browser-media-mime-type": "^1.0.0",
     "chalk": "4.1.2",
