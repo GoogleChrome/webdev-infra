@@ -16,101 +16,104 @@
 
 /**
  * @fileoverview Export a single method that grabs the title, permalink, date,
- * and content from the arbitrary XML feeds, normalised and 
+ * and content from the arbitrary XML feeds, normalised and
  * write a JSON file, containing the feed data needed for the updated author page,
- * to the src/site/_data/ path for both d.c.c and web.dev.
+ * to the specific path for both d.c.c and web.dev.
  */
 
 const fs = require('fs');
-const jsdom = require('jsdom');
+const cheerio = require('cheerio');
 const fetch = require('node-fetch');
-
-/**
- * Grab the content from the target HTML tag
- * @param {HTMLElement} parent the HTMLElement of the article.
- * @param {string} target A name of the target HTML tag in the article.
- * @return {string} The content in the target HTML tag.
- */
-const getElementsByTag = (parent, target) => {
-  const collections = parent.getElementsByTagName(target);
-
-  if (!collections.length) return '';
-
-  return collections[0].innerHTML;
-}
 
 /**
  * Sort the feeds from all sources by date from newest to the oldest.
  * @param {Array} feeds A collection of the articles.
- * @return {Array} A collection of the articles, which are sorted by date.
+ * @return {Array<Object>} A collection of the articles, which are sorted by date.
  */
-const sortFeeds = (feeds) => {
+const sortFeeds = feeds => {
   return feeds.sort((a, b) => {
     const d1 = new Date(a.date);
     const d2 = new Date(b.date);
-    
-    return d2.valueOf() - d1.valueOf();
+
+    return d2.getTime() - d1.getTime();
   });
-}
+};
 
 /**
- * Extract the permalink from the entry in XML feeds
- * @param {HTMLElement} entry A XML path.
- * @return {string} The permalink
+ * Extract the permalink from the entry in XML feeds.
+ * @param {cheerio.CheerioAPI} $ A querying function, bound to a document created from the provided markup.
+ * @param {cheerio.Element} entry A target element to extract a permalink.
+ * @return {string} The permalink.
  */
-const getPermalink = (entry) => {
-  const guid = getElementsByTag(entry, 'guid');
-  const href = entry.getElementsByTagName('link')[0].getAttribute('href');
+const getPermalink = ($, entry) => {
+  const guid = $('guid', entry).text();
+  const href = $('link', entry).attr('href');
 
   return guid || href || '';
-}
+};
 
 /**
- * Grab the title, permalink, date, and content from the XML data.
- * @param {string} xmlPath A XML path.
- * @return {Promise<object>} A list of feeds after extract the XML.
+ * Fetch the XML data from the specific URL. Returns the XML content,
+ * or warns "Failed to fetch the XML files." and returns an empty string if there was a problem.
+ * @param {string} xmlPath A XML url.
+ * @return {Promise<string>} the XML content.
  */
-const extractXML = async (xmlPath) => {
-  const response = await fetch(xmlPath);
-  const body = await response.text();
-  const dom = await new jsdom.JSDOM(body);
+const getXMLContent = async xmlPath => {
+  try {
+    const response = await fetch(xmlPath);
+    const body = await response.text();
+    return body;
+  } catch (err) {
+    console.warn('Failed to fetch the XML files.');
+    return '';
+  }
+};
+
+/**
+ * Grab the title, permalink, date, and content from the RSS feeds.
+ * @param {string} xmlPath A XML url.
+ * @return {Promise<Array<Object>>} A list of feeds after extract the XML data.
+ */
+const extractXML = async xmlPath => {
+  const body = await getXMLContent(xmlPath);
+
+  if (!body) return [];
+
+  const $ = await cheerio.load(body, {
+    xml: {
+      // @ts-ignore
+      normalizeWhitespace: true,
+    },
+  });
+
   const feeds = [];
+  $('entry').each((_, entry) => {
+    const postData = {source: xmlPath};
+    postData.url = getPermalink($, entry);
 
-  const entryTagCollection = Array.from(
-    dom.window.document.getElementsByTagName('entry')
-  );
-  const itemTagCollection = Array.from(
-    dom.window.document.getElementsByTagName('item')
-  );
-
-  for (const entry of entryTagCollection) {
-    const postData = { source: xmlPath };
-
-    postData.title = getElementsByTag(entry, 'title');
-    postData.summary = getElementsByTag(entry, 'summary');
-    postData.date = getElementsByTag(entry, 'updated');
-
-    postData.url = getPermalink(entry);
-  
-    feeds.push(postData);
-  };
-
-  for (const item of itemTagCollection) {
-    const postData = { source: xmlPath };
-
-    postData.title = getElementsByTag(item, 'title');
-    postData.summary = getElementsByTag(item, 'description');
-    postData.date = getElementsByTag(item, 'pubDate');
-
-    postData.url = getPermalink(item);
+    postData.title = $('title', entry).text();
+    postData.date = $('updated', entry).text();
+    postData.summary = $('summary', entry).text();
 
     feeds.push(postData);
-  };
+  });
+
+  $('item').each((_, item) => {
+    const postData = {source: xmlPath};
+    postData.url = getPermalink($, item);
+
+    postData.title = $('title', item).text();
+    postData.date = $('pubDate', item).text();
+    postData.summary = $('description', item).text();
+
+    feeds.push(postData);
+  });
 
   return feeds;
-}
+};
 
-const externalPosts = async (authorsData) => {
+const externalPosts = async (authorsDataPath, exportFeedsToPath) => {
+  const authorsData = fs.readFileSync(authorsDataPath, 'utf8');
   const authorData = JSON.parse(authorsData);
   const sortedFeeds = [];
 
@@ -126,11 +129,12 @@ const externalPosts = async (authorsData) => {
     }
 
     authorData[author].feeds = sortFeeds(sortedFeeds);
-  };
+  }
 
   fs.writeFileSync(
-    'src/site/_data/external-posts.json', JSON.stringify(authorData)
+    exportFeedsToPath,
+    JSON.stringify(authorData)
   );
-}
+};
 
 module.exports = {externalPosts};
