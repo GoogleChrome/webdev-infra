@@ -52,15 +52,6 @@ try_it:
   ru: Попробуйте
   zh: 请尝试
 
-key_term:
-  en: Key Term
-  es: Término clave
-  ja: 重要な用語
-  ko: 핵심 용어
-  pt: Termo chave
-  ru: Ключевой термин
-  zh: 重要词汇
-
 gotchas:
   en: Gotchas
   es: Gotchas
@@ -69,7 +60,7 @@ gotchas:
   pt: Pegadinhas
   ru: Обратите внимание
   zh: 问题
-  
+
 celebration:
   en: Celebration
   es: Celebración
@@ -97,24 +88,6 @@ update:
   ru: Обновлять
   zh: 更新
 
-do:
-  en: Do
-  es: Hacer
-  ja: すべきこと
-  ko: 허용
-  pt: Faça
-  ru: Правильно
-  zh: 正确做法
-
-dont:
-  en: Don't
-  es: No hagas
-  ja: してはいけないこと
-  ko: 금지
-  pt: Não faça
-  ru: Неправильно
-  zh: 错误做法
-
 close:
   en: Close
   es: Cerrar
@@ -124,32 +97,6 @@ close:
   ru: Закрыть
   zh: 关闭
 
-next:
-  en: Next
-  es: Contiguo
-  ja: 次へ
-  ko: 다음
-  pt: Avançar
-  ru: Далее
-  zh: 下一课
-
-prev:
-  en: Prev # Short for "previous"
-  es: Previo
-  ja: 前へ
-  ko: 이전
-  pt: Voltar
-  ru: Назад
-  zh: 上一课
-
-new:
-  en: new
-  es: nuevo
-  ja: 新着
-  ko: 신규
-  pt: novo
-  ru: новое
-  zh: 新
 
 updated:
   en: Updated
@@ -160,33 +107,11 @@ updated:
   ru: Обновлено
   zh: 更新日期
 
-share:
-  en: Share
-  es: Compartir
-  ja: 共有する
-  ko: 공유
-  pt: Compartilhar
-  ru: Поделиться
-  zh: 分享
-
-sign_in:
-  en: Sign in
-
-all:
-  en: All
-  es: Todos
-
-see_all:
-  en: See all
-
-more:
-  en: More
-
-by:
-  en: By
-
-chrome_devrel:
-  en: Chrome DevRel
-
-skip_link:
-  en: Skip to content
+tip:
+  en: tip
+  es: consejo
+  ja: 端っこ
+  ko: 팁
+  pt: dica
+  ru: совет
+  zh: 尖端

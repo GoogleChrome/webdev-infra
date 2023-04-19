@@ -135,6 +135,12 @@ function Aside(content, type = 'note') {
       title = i18n(`i18n.aside.${type}`, locale);
       utilities.main = 'bg-state-update-bg color-state-update-text';
       break;
+
+    case 'tip':
+      icon = 'lightbulb.svg';
+      title = i18n(`i18n.aside.${type}`, locale);
+      utilities.main = 'bg-state-good-bg color-state-good-text';
+      break;
   }
 
   // Make sure that we don't insert multiple newlines when this component is
