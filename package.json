@@ -37,7 +37,6 @@
     "express": "4.18.2",
     "fast-glob": "3.2.12",
     "js-yaml": "4.1.0",
-    "jsdom": "^21.1.1",
     "lit-element": "^2.5.1",
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
