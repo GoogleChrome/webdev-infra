@@ -155,7 +155,7 @@ function Aside(content, type = 'note') {
       `<strong>${title}</strong></p>`
       : '';
   const asideHTML =
-      `<aside class="aside flow ${utilities.main}">` +
+      `<aside class="aside aside--${type} flow ${utilities.main}">` +
       titleHTML +
       `<div class="${utilities.body} flow">${renderedContent}</div></aside>`;
 
