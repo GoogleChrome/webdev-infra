@@ -1,12 +1,10 @@
 .aside {
   --gutter: 0.5rem;
 
-  @extend .flow;
+  @extend .flow !optional;
 
   padding: 1.5rem;
   border-radius: 6px;
-
-  @include apply-utility('bg', 'mid-bg'); // For if no BG utility is added
 
   a {
     color: currentColor;
@@ -29,13 +27,13 @@
   /// is consistent
   &,
   & + * {
-    @include apply-utility('flow-space', 'size-2');
+    --flow-space: clamp(2.375rem, 1.98rem + 1.96vw, 3.75rem);
   }
 
   /// Now, we want to make sure all spacing inside the
   /// element stays consistent too
   > * {
-    @include apply-utility('flow-space', 'base');
+    --flow-space: 1rem;
   }
 
   // This duplicates the above ".aside" for users who just want colors.
