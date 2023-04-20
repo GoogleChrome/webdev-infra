@@ -3,8 +3,8 @@
 
   @extend .flow;
 
-  padding: $global-gutter;
-  border-radius: $global-radius-large;
+  padding: 1.5rem;
+  border-radius: 6px;
 
   @include apply-utility('bg', 'mid-bg'); // For if no BG utility is added
 
