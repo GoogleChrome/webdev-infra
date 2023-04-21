@@ -20,11 +20,11 @@
   &__items {
     display: flex;
     margin: 1rem 1rem 1rem 0;
+    padding: 0;
     list-style: none;
 
     @include media-query('md-max') {
       margin-left: 0;
-      padding-left: 0;
     }
   }
 
