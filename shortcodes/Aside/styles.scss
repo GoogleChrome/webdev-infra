@@ -37,7 +37,8 @@
   }
 
   // This duplicates the above ".aside" for users who just want colors.
-  &--default {
+  &--default,
+  &--update {
     --link-color: var(--color-blue-darkest);
     --link-visited-color: var(--color-blue-darkest);
     --link-rgb-background: var(--rgb-blue-darkest);
@@ -62,7 +63,9 @@
   }
 
   &--success,
-  &--tip{
+  &--tip,
+  &--celebration,
+  &--objective {
     --link-color: var(--color-green-darkest);
     --link-visited-color: var(--color-green-darkest);
     --link-rgb-background: var(--rgb-green-darkest);
