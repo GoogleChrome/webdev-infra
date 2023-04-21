@@ -16,12 +16,10 @@
 
 /**
  * @fileoverview Export a single method that grabs the title, permalink, date,
- * and content from the arbitrary XML feeds, normalised and
- * write a JSON file, containing the feed data needed for the updated author page,
- * to the specific path for both d.c.c and web.dev.
+ * and content from the arbitrary XML feeds, normalised and return the feeds
+ * which contain data needed for the updated author page.
  */
 
-const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
@@ -54,28 +52,28 @@ const getPermalink = ($, entry) => {
 
 /**
  * Fetch the XML data from the specific URL. Returns the XML content,
- * or warns "Failed to fetch the XML files." and returns an empty string if there was a problem.
- * @param {string} xmlPath A XML url.
+ * or warns "Failed to fetch the XML file." and returns an empty string if there was a problem.
+ * @param {string} url A XML url.
  * @return {Promise<string>} the XML content.
  */
-const getXMLContent = async xmlPath => {
+const getFeed = async url => {
   try {
-    const response = await fetch(xmlPath);
+    const response = await fetch(url);
     const body = await response.text();
     return body;
   } catch (err) {
-    console.warn('Failed to fetch the XML files.');
+    console.warn('Failed to fetch the XML file.');
     return '';
   }
 };
 
 /**
  * Grab the title, permalink, date, and content from the RSS feeds.
- * @param {string} xmlPath A XML url.
+ * @param {{url: string, label: string}} external An author external data.
  * @return {Promise<Array<Object>>} A list of feeds after extract the XML data.
  */
-const extractXML = async xmlPath => {
-  const body = await getXMLContent(xmlPath);
+const extractPosts = async external => {
+  const body = await getFeed(external.url);
 
   if (!body) return [];
 
@@ -87,24 +85,18 @@ const extractXML = async xmlPath => {
   });
 
   const feeds = [];
-  $('entry').each((_, entry) => {
-    const postData = {source: xmlPath};
-    postData.url = getPermalink($, entry);
+  $('item, entry').each((_, post) => {
+    const postData = {source: external.label};
+    postData.url = getPermalink($, post);
+    postData.title = $('title', post).text();
 
-    postData.title = $('title', entry).text();
-    postData.date = $('updated', entry).text();
-    postData.summary = $('summary', entry).text();
-
-    feeds.push(postData);
-  });
-
-  $('item').each((_, item) => {
-    const postData = {source: xmlPath};
-    postData.url = getPermalink($, item);
-
-    postData.title = $('title', item).text();
-    postData.date = $('pubDate', item).text();
-    postData.summary = $('description', item).text();
+    if (post.name === 'entry') {
+      postData.date = $('updated', post).text();
+      postData.summary = $('summary', post).text();
+    } else {
+      postData.date = $('pubDate', post).text();
+      postData.summary = $('description', post).text();
+    }
 
     feeds.push(postData);
   });
@@ -112,29 +104,26 @@ const extractXML = async xmlPath => {
   return feeds;
 };
 
-const externalPosts = async (authorsDataPath, exportFeedsToPath) => {
-  const authorsData = fs.readFileSync(authorsDataPath, 'utf8');
-  const authorData = JSON.parse(authorsData);
-  const sortedFeeds = [];
+const rssFeeds = async feeds => {
+  const authorFeeds = [];
 
-  for (const author in authorData) {
-    const externalPath = authorData[author].external;
-    authorData[author]['feeds'] = [];
+  for (const author in feeds) {
+    const sortedFeeds = [];
+    const feedPaths = feeds[author];
 
-    if (!externalPath?.length) break;
+    if (!feedPaths?.length) break;
 
-    for (const path of externalPath) {
-      const feeds = await extractXML(path.url);
-      sortedFeeds.push(...feeds);
+    for (const path of feedPaths) {
+      const posts = await extractPosts(path);
+      sortedFeeds.push(...posts);
     }
 
-    authorData[author].feeds = sortFeeds(sortedFeeds);
+    const obj = {};
+    obj[author] = sortFeeds(sortedFeeds);
+    authorFeeds.push(obj);
   }
 
-  fs.writeFileSync(
-    exportFeedsToPath,
-    JSON.stringify(authorData)
-  );
+  return authorFeeds;
 };
 
-module.exports = {externalPosts};
+module.exports = {rssFeeds};
