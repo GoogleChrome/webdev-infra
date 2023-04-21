@@ -16,7 +16,7 @@
 
 /**
  * @fileoverview Export a single method that grabs the title, permalink, date,
- * and content from the arbitrary XML feeds, normalised and return the feeds
+ * and content from the arbitrary XML feeds, normalise and return the feeds
  * which contain data needed for the updated author page.
  */
 
@@ -24,7 +24,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
 /**
- * Sort the feeds from all sources by date from newest to the oldest.
+ * Sort the feeds from all sources by date from the newest to the oldest.
  * @param {Array} feeds A collection of the articles.
  * @return {Array<Object>} A collection of the articles, which are sorted by date.
  */
@@ -108,19 +108,19 @@ const rssFeeds = async feeds => {
   const authorFeeds = [];
 
   for (const author in feeds) {
-    const sortedFeeds = [];
+    const allPosts = [];
     const feedPaths = feeds[author];
 
     if (!feedPaths?.length) break;
 
     for (const path of feedPaths) {
       const posts = await extractPosts(path);
-      sortedFeeds.push(...posts);
+      allPosts.push(...posts);
     }
 
-    const obj = {};
-    obj[author] = sortFeeds(sortedFeeds);
-    authorFeeds.push(obj);
+    const feedsObject = {};
+    feedsObject[author] = sortFeeds(allPosts);
+    authorFeeds.push(feedsObject);
   }
 
   return authorFeeds;
