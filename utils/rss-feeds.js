@@ -52,7 +52,7 @@ const getPermalink = ($, entry) => {
 
 /**
  * Fetch the XML data from the specific URL. Returns the XML content,
- * or warns "Failed to fetch the XML file." and returns an empty string if there was a problem.
+ * or warns `Failed to fetch ${url}` and returns an empty string if there was a problem.
  * @param {string} url A XML url.
  * @return {Promise<string>} the XML content.
  */
@@ -62,7 +62,7 @@ const getFeed = async url => {
     const body = await response.text();
     return body;
   } catch (err) {
-    console.warn('Failed to fetch the XML file.');
+    console.warn(`Failed to fetch ${url}`);
     return '';
   }
 };
@@ -104,6 +104,10 @@ const extractPosts = async external => {
   return feeds;
 };
 
+/**
+ * @param {import('types').Feeds} feeds
+ * @returns {Promise<import('types').AuthorsFeedData>}
+ */
 const rssFeeds = async feeds => {
   const authorFeeds = [];
 
@@ -118,7 +122,7 @@ const rssFeeds = async feeds => {
       allPosts.push(...posts);
     }
 
-    const feedsObject = {};
+    const /** @type {import('types').AuthorFeedData} */ feedsObject = {};
     feedsObject[author] = sortFeeds(allPosts);
     authorFeeds.push(feedsObject);
   }
