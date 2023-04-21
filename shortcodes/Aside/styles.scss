@@ -61,7 +61,8 @@
     color: var(--color-red-darkest);
   }
 
-  &--success {
+  &--success,
+  &--tip{
     --link-color: var(--color-green-darkest);
     --link-visited-color: var(--color-green-darkest);
     --link-rgb-background: var(--rgb-green-darkest);
