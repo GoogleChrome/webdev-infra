@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-export type AuthorExternal = {
+type AuthorExternal = {
   label: string;
   url: string;
 };
 
-export type FeedsData = {
+type FeedsData = {
   source: string;
   url: string;
   title: string;
