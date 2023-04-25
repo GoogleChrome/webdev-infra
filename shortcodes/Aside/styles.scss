@@ -38,7 +38,8 @@
 
   // This duplicates the above ".aside" for users who just want colors.
   &--default,
-  &--update {
+  &--update,
+  &--info {
     --link-color: var(--color-blue-darkest);
     --link-visited-color: var(--color-blue-darkest);
     --link-rgb-background: var(--rgb-blue-darkest);
