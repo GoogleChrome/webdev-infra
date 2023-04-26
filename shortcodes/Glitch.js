@@ -85,7 +85,9 @@ module.exports = param => {
 
   let allow = DEFAULT_ALLOW.join('; ');
   if (glitchProps.allow) {
-    allow = [...DEFAULT_ALLOW, ...expandAllowSource(glitchProps.allow)].join('; ');
+    allow = [...DEFAULT_ALLOW, ...expandAllowSource(glitchProps.allow)].join(
+      '; '
+    );
   }
 
   const src = `${url.toString()}?${searchParams.toString()}`;
