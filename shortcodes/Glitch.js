@@ -83,7 +83,7 @@ module.exports = param => {
     searchParams.set('previewSize', String(glitchProps.previewSize));
   }
 
-  let allow = Array.from(new Set([...DEFAULT_ALLOW])).join('; ');
+  let allow = DEFAULT_ALLOW.join('; ');
   if (glitchProps.allow) {
     allow = Array.from(
       new Set([...DEFAULT_ALLOW, ...expandAllowSource(glitchProps.allow)])
