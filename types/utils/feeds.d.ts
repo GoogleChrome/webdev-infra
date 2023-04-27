@@ -29,7 +29,7 @@ type FeedsData = {
 
 export type AuthorFeedData = {
   [key: string]: FeedsData[];
-}
+};
 
 export type Feeds = {[key: string]: AuthorExternal[]};
 export type AuthorsFeedData = AuthorFeedData[];
