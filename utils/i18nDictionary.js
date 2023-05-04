@@ -52,7 +52,9 @@ class I18nDictionary {
    * @param {string} dir The directory to walk
    */
   loadEntries(dir) {
-    const files = fg.sync(path.join(dir, '/**/*.{yml,yaml}'));
+    const files = fg.sync(path.join(dir.replace(/([()])/g, '\\$1'), '/**/*.{yml,yaml}'));
+
+    console.log(files)
 
     const baseDir = path.dirname(dir);
     for (const file of files) {
