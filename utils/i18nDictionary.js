@@ -30,6 +30,7 @@ const get = require('lodash.get');
 const set = require('lodash.set');
 
 const DEFAULT_PATH = path.join(__dirname, '../data/i18n');
+const ESCAPE_PARENTHESES_PATTERN = /([()])/g;
 
 class I18nDictionary {
   constructor(defaultPath = DEFAULT_PATH) {
@@ -52,7 +53,10 @@ class I18nDictionary {
    * @param {string} dir The directory to walk
    */
   loadEntries(dir) {
-    const files = fg.sync(path.join(dir.replace(/([()])/g, '\\$1'), '/**/*.{yml,yaml}'));
+    // Replace any parentheses in the directory path with escaped versions of themselves
+    // This is necessary because fast-glob has problems parsing folders containing parentheses.
+    const cleanDir = dir.replace(ESCAPE_PARENTHESES_PATTERN, '\\$1');
+    const files = fg.sync(path.join(cleanDir, '/**/*.{yml,yaml}'));
 
     const baseDir = path.dirname(dir);
     for (const file of files) {
