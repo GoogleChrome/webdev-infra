@@ -54,8 +54,6 @@ class I18nDictionary {
   loadEntries(dir) {
     const files = fg.sync(path.join(dir.replace(/([()])/g, '\\$1'), '/**/*.{yml,yaml}'));
 
-    console.log(files)
-
     const baseDir = path.dirname(dir);
     for (const file of files) {
       const dir = path.dirname(file);
