@@ -25,13 +25,13 @@ const path = require('path');
 const {I18nFilter} = require('../../filters/i18n');
 
 function getLocaleFromPath(path) {
-  return path ? path.split('/')[1] : defaultLocale;
+  return path ? path.split('/')[1] : DEFAULT_LOCALE;
 }
 
-const defaultLocale = 'en';
+const DEFAULT_LOCALE = 'en';
 
 const i18n = new I18nFilter().configure({
-  defaultLocale,
+  DEFAULT_LOCALE,
   dictPaths: [path.join(__dirname, '..', '_data', 'i18n')],
 });
 
