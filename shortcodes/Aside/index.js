@@ -144,16 +144,16 @@ function Aside(content, type = 'note') {
   // See https://github.com/GoogleChrome/web.dev/issues/7640
   const renderedContent = md.renderInline(content);
   const titleHTML = title.length
-      ? `<p class="cluster ${utilities.title}">` +
-      `<span class="aside__icon box-block ${
+      ? `<p class="cluster ${utilities.title}">
+      <span class="aside__icon box-block ${
           utilities.icon
-      }">${getIcon()}</span>` +
-      `<strong>${title}</strong></p>`
+      }">${getIcon()}</span>
+      <strong>${title}</strong></p>`
       : '';
   const asideHTML =
-      `<aside class="aside aside--${type} flow ${utilities.main}">` +
-      titleHTML +
-      `<div class="${utilities.body} flow">${renderedContent}</div></aside>`;
+      `<aside class="aside aside--${type} flow ${utilities.main}">
+      ${titleHTML}
+      <div class="${utilities.body} flow">${renderedContent}</div></aside>`;
 
   return html`${asideHTML}`;
 }
