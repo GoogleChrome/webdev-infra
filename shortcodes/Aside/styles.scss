@@ -1,3 +1,83 @@
+:root {
+  --aside-link-color: #1a73e8;
+  --aside-link-visited-color: #1a73e8;
+  --aside-link-rgb-background: 26, 115, 232;
+  --aside-background-color: #e8f0fe;
+  --aside-color: #1a73e8;
+
+  --aside-update-link-color: #1a73e8;
+  --aside-update-link-visited-color: #1a73e8;
+  --aside-update-link-rgb-background: 26, 115, 232;
+  --aside-update-background-color: #e8f0fe;
+  --aside-update-color: #1a73e8;
+
+  --aside-info-link-color: #1a73e8;
+  --aside-info-link-visited-color: #1a73e8;
+  --aside-info-link-rgb-background: 26, 115, 232;
+  --aside-info-background-color: #e8f0fe;
+  --aside-info-color: #1a73e8;
+
+  --aside-caution-link-color: #d93025;
+  --aside-caution-link-visited-color: #d93025;
+  --aside-caution-link-rgb-background: 217, 48, 37;
+  --aside-caution-background-color: #fce8e6;
+  --aside-caution-color: #d93025;
+
+  --aside-warning-link-color: #e37400;
+  --aside-warning-link-visited-color: #e37400;
+  --aside-warning-link-rgb-background: 227, 116, 0;
+  --aside-warning-background-color: #fef7e0;
+  --aside-warning-color: #e37400;
+
+  --aside-success-link-color: #1e8e3e;
+  --aside-success-link-visited-color: #1e8e3e;
+  --aside-success-link-rgb-background: 30, 142, 62;
+  --aside-success-background-color: #e6f4ea;
+  --aside-success-color: #1e8e3e;
+
+  --aside-tip-link-color: #1e8e3e;
+  --aside-tip-link-visited-color: #1e8e3e;
+  --aside-tip-link-rgb-background: 30, 142, 62;
+  --aside-tip-background-color: #e6f4ea;
+  --aside-tip-color: #1e8e3e;
+
+  --aside-celebration-link-color: #1e8e3e;
+  --aside-celebration-link-visited-color: #1e8e3e;
+  --aside-celebration-link-rgb-background: 30, 142, 62;
+  --aside-celebration-background-color: #e6f4ea;
+  --aside-celebration-color: #1e8e3e;
+
+  --aside-objective-link-color: #1e8e3e;
+  --aside-objective-link-visited-color: #1e8e3e;
+  --aside-objective-link-rgb-background: 30, 142, 62;
+  --aside-objective-background-color: #e6f4ea;
+  --aside-objective-color: #1e8e3e;
+
+  --aside-important-link-color: #9333ea;
+  --aside-important-link-visited-color: #9333ea;
+  --aside-important-link-rgb-background: 147, 51, 234;
+  --aside-important-background-color: #f3e8fd;
+  --aside-important-color: #9333ea;
+
+  --aside-key-term-link-color: #ff0266;
+  --aside-key-term-link-visited-color: #ff0266;
+  --aside-key-term-link-rgb-background: 255, 2, 102;
+  --aside-key-term-background-color: #fce8f1;
+  --aside-key-term-color: #ff0266;
+
+  --aside-codelab-link-color: #006f94;
+  --aside-codelab-link-visited-color: #006f94;
+  --aside-codelab-link-rgb-background: 0, 111, 148;
+  --aside-codelab-background-color: #e8f4f9;
+  --aside-codelab-color: #006f94;
+
+  --aside-example-link-color: #006f94;
+  --aside-example-link-visited-color: #006f94;
+  --aside-example-link-rgb-background: 0, 111, 148;
+  --aside-example-background-color: #e8f4f9;
+  --aside-example-color: #006f94;
+}
+
 .aside {
   --gutter: 0.5rem;
 
@@ -7,11 +87,11 @@
   border-radius: 6px;
 
   a {
-    color: currentColor;
-    text-decoration-color: currentColor;
+    color: var(--aside-link-color);
+    text-decoration-color: var(--aside-link-color);
 
     &:focus {
-      outline-color: currentColor;
+      outline-color: var(--aside-link-color);
     }
   }
 
@@ -21,81 +101,103 @@
     height: 1.2em;
   }
 
-  /// Blocks usually shouldn't control spacing, but
-  /// the aside is often found in `.flow` contexts
-  /// so we need to make sure the space above and below
-  /// is consistent
   &,
   & + * {
     --flow-space: clamp(2.375rem, 1.98rem + 1.96vw, 3.75rem);
   }
 
-  /// Now, we want to make sure all spacing inside the
-  /// element stays consistent too
   > * {
     --flow-space: 1rem;
   }
 
-  // This duplicates the above ".aside" for users who just want colors.
   &--default,
   &--update,
   &--info {
-    --link-color: var(--color-blue-darkest);
-    --link-visited-color: var(--color-blue-darkest);
-    --link-rgb-background: var(--rgb-blue-darkest);
-    background-color: var(--color-blue-lightest);
-    color: var(--color-blue-darkest);
+    --link-color: var(--aside-link-color);
+    --link-visited-color: var(--aside-link-visited-color);
+    --link-rgb-background: var(--aside-link-rgb-background);
+    background-color: var(--aside-background-color);
+    color: var(--aside-color);
   }
 
   &--caution {
-    --link-color: var(--color-yellow-darkest);
-    --link-visited-color: var(--color-yellow-darkest);
-    --link-rgb-background: var(--rgb-yellow-darkest);
-    background-color: var(--color-yellow-lightest);
-    color: var(--color-yellow-darkest);
+    --link-color: var(--aside-caution-link-color);
+    --link-visited-color: var(--aside-caution-link-visited-color);
+    --link-rgb-background: var(--aside-caution-link-rgb-background);
+    background-color: var(--aside-caution-background-color);
+    color: var(--aside-caution-color);
   }
 
   &--warning {
-    --link-color: var(--color-red-darkest);
-    --link-visited-color: var(--color-red-darkest);
-    --link-rgb-background: var(--rgb-red-darkest);
-    background-color: var(--color-red-lightest);
-    color: var(--color-red-darkest);
+    --link-color: var(--aside-warning-link-color);
+    --link-visited-color: var(--aside-warning-link-visited-color);
+    --link-rgb-background: var(--aside-warning-link-rgb-background);
+    background-color: var(--aside-warning-background-color);
+    color: var(--aside-warning-color);
   }
 
-  &--success,
-  &--tip,
-  &--celebration,
+  &--success {
+    --link-color: var(--aside-success-link-color);
+    --link-visited-color: var(--aside-success-link-visited-color);
+    --link-rgb-background: var(--aside-success-link-rgb-background);
+    background-color: var(--aside-success-background-color);
+    color: var(--aside-success-color);
+  }
+
+  &--tip {
+    --link-color: var(--aside-tip-link-color);
+    --link-visited-color: var(--aside-tip-link-visited-color);
+    --link-rgb-background: var(--aside-tip-link-rgb-background);
+    background-color: var(--aside-success-background-color);
+    color: var(--aside-tip-color);
+  }
+
+  &--celebration {
+    --link-color: var(--aside-celebration-link-color);
+    --link-visited-color: var(--aside-celebration-link-visited-color);
+    --link-rgb-background: var(--aside-celebration-link-rgb-background);
+    background-color: var(--aside-celebration-background-color);
+    color: var(--aside-celebration-color);
+  }
+
   &--objective {
-    --link-color: var(--color-green-darkest);
-    --link-visited-color: var(--color-green-darkest);
-    --link-rgb-background: var(--rgb-green-darkest);
-    background-color: var(--color-green-lightest);
-    color: var(--color-green-darkest);
+    --link-color: var(--aside-objective-link-color);
+    --link-visited-color: var(--aside-objective-link-visited-color);
+    --link-rgb-background: var(--aside-objective-link-rgb-background);
+    background-color: var(--aside-objective-background-color);
+    color: var(--aside-objective-color);
   }
 
   &--important {
-    --link-color: var(--color-purple-darkest);
-    --link-visited-color: var(--color-purple-darkest);
-    --link-rgb-background: var(--rgb-purple-darkest);
-    background-color: var(--color-purple-lightest);
-    color: var(--color-purple-darkest);
+    --link-color: var(--aside-important-link-color);
+    --link-visited-color: var(--aside-important-link-visited-color);
+    --link-rgb-background: var(--aside-important-link-rgb-background);
+    background-color: var(--aside-important-background-color);
+    color: var(--aside-important-background-color);
   }
 
   &--key-term {
-    --link-color: var(--color-pink-darkest);
-    --link-visited-color: var(--color-pink-darkest);
-    --link-rgb-background: var(--rgb-pink-darkest);
-    background-color: var(--color-pink-lightest);
-    color: var(--color-pink-darkest);
+    --link-color: var(--aside-key-term-link-color);
+    --link-visited-color: var(--aside-key-term-link-visited-color);
+    --link-rgb-background: var(--aside-key-term-link-rgb-background);
+    background-color: var(--aside-key-term-background-color);
+    color: var(--aside-key-term-background-color);
   }
 
-  &--codelab,
+  &--codelab {
+    --link-color: var(--aside-codelab-link-color);
+    --link-visited-color: var(--aside-codelab-link-visited-color);
+    --link-rgb-background: var(--aside-codelab-link-rgb-background);
+    background-color: var(--aside-codelab-background-color);
+    color: var(--aside-codelab-background-color);
+  }
+
   &--example {
-    --link-color: var(--color-cyan-darkest);
-    --link-visited-color: var(--color-cyan-darkest);
-    --link-rgb-background: var(--rgb-cyan-darkest);
-    background-color: var(--color-cyan-lightest);
-    color: var(--color-cyan-darkest);
+    --link-color: var(--aside-example-link-color);
+    --link-visited-color: var(--aside-example-link-visited-color);
+    --link-rgb-background: var(--aside-example-link-rgb-background);
+    background-color: var(--aside-example-background-color);
+    color: var(--aside-example-background-color);
   }
 }
+
