@@ -24,11 +24,20 @@ const md = require('markdown-it')({html: true});
 const path = require('path');
 const {I18nFilter} = require('../../filters/i18n');
 
-function getLocaleFromPath(path) {
-  return path ? path.split('/')[1] : DEFAULT_LOCALE;
-}
-
 const DEFAULT_LOCALE = 'en';
+
+// If an icon is required, it grabs the SVG source with fs
+// because in a shortcode, we have no access to includes etc
+const getIcon = (icon) => {
+  if (!icon.length) {
+    return '';
+  }
+
+  return fs.readFileSync(
+      path.join(__dirname, 'icons', icon),
+      'utf8',
+  );
+};
 
 const i18n = new I18nFilter().configure({
   DEFAULT_LOCALE,
@@ -39,7 +48,7 @@ const i18n = new I18nFilter().configure({
  * @this {EleventyPage}
  */
 function Aside(content, type = 'note') {
-  const locale = getLocaleFromPath(this.page && this.page.filePathStem);
+  const locale = this.ctx.locale;
 
   // CSS utility classes that vary per aside type
   const utilities = {
@@ -52,19 +61,6 @@ function Aside(content, type = 'note') {
   // These two get populated based on type
   let title = '';
   let icon = '';
-
-  // If an icon is required, it grabs the SVG source with fs
-  // because in a shortcode, we have no access to includes etc
-  const getIcon = () => {
-    if (!icon.length) {
-      return '';
-    }
-
-    return fs.readFileSync(
-        path.join(__dirname, 'icons', icon),
-        'utf8',
-    );
-  };
 
   // Generate all the configurations per aside type
   switch (type) {
