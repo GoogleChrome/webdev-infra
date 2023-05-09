@@ -7,8 +7,10 @@
     <span class="wdi-browser-compat__icon" data-browser="{{ browser.name }}">
       <span class="visually-hidden">{{ browser.ariaLabel }}</span>
     </span>
-    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}">
-      {{- browser.supportIcon -}}
+    <span class="wdi-browser-compat__version" data-compat="{{ browser.supportInfo.compatProperty }}" title="{{ browser.supportInfo.aria }}" aria-label="{{ browser.supportInfo.aria}}">
+      {% if browser.supportInfo.aria === "Supported" %}
+        {{- browser.supportIcon -}}
+      {% endif %}
     </span>
     </li>
     {%- endfor %}

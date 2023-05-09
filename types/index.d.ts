@@ -24,3 +24,6 @@ export type TODO = utils.TODO;
 export type TODOObject = utils.TODOObject;
 export type VideoArgs = shortcodes.VideoArgs;
 export type YouTubeArgs = shortcodes.YouTubeArgs;
+export type Feeds = utils.Feeds;
+export type AuthorFeedData = utils.AuthorFeedData;
+export type AuthorsFeedData = utils.AuthorsFeedData;
