@@ -40,7 +40,7 @@ const getIcon = (icon) => {
 };
 
 const i18n = new I18nFilter().configure({
-  DEFAULT_LOCALE,
+  defaultLocale: DEFAULT_LOCALE,
   dictPaths: [path.join(__dirname, '..', '_data', 'i18n')],
 });
 
@@ -50,48 +50,28 @@ const i18n = new I18nFilter().configure({
 function Aside(content, type = 'note') {
   const locale = this.ctx.locale;
 
-  // CSS utility classes that vary per aside type
-  const utilities = {
-    main: '',
-    title: '',
-    icon: '',
-    body: '',
-  };
-
   // These two get populated based on type
   let title = '';
   let icon = '';
 
   // Generate all the configurations per aside type
   switch (type) {
-    case 'note':
-    default:
-      utilities.title = 'color-state-info-text';
-      utilities.main = 'bg-state-info-bg color-state-info-text';
-      break;
-
     case 'caution':
-      utilities.title = 'color-state-bad-text';
-      utilities.main = 'bg-state-bad-bg color-state-bad-text';
       icon = 'error.svg';
       title = i18n(`i18n.aside.${type}`, locale);
       break;
 
     case 'warning':
-      utilities.icon = 'color-state-warn-text';
-      utilities.main = 'bg-state-warn-bg color-state-warn-text';
       icon = 'warning.svg';
       title = i18n(`i18n.aside.${type}`, locale);
       break;
 
     case 'success':
-      utilities.main = 'bg-state-good-bg color-state-good-text';
       icon = 'done.svg';
       title = i18n(`i18n.aside.${type}`, locale);
       break;
 
     case 'objective':
-      utilities.main = 'bg-state-good-bg color-state-good-text';
       icon = 'done.svg';
       title = i18n(`i18n.aside.${type}`, locale);
       break;
@@ -99,29 +79,24 @@ function Aside(content, type = 'note') {
     case 'gotchas':
       icon = 'lightbulb.svg';
       title = i18n(`i18n.aside.gotchas`, locale);
-      utilities.main = 'bg-tertiary-box-bg color-tertiary-box-text';
       break;
 
     case 'important':
       icon = 'lightbulb.svg';
       title = i18n(`i18n.aside.important`, locale);
-      utilities.main = 'bg-tertiary-box-bg color-tertiary-box-text';
       break;
 
     case 'key-term':
       icon = 'highlighter.svg';
       title = i18n(`i18n.aside.key_term`, locale);
-      utilities.main = 'color-secondary-box-text bg-secondary-box-bg';
       break;
 
     case 'codelab':
       icon = 'code.svg';
       title = i18n(`i18n.aside.try_it`, locale);
-      utilities.main = 'bg-quaternary-box-bg color-quaternary-box-text';
       break;
 
     case 'celebration':
-      utilities.main = 'bg-state-good-bg color-state-good-text';
       icon = 'celebration.svg';
       title = i18n(`i18n.aside.${type}`, locale);
       break;
@@ -129,13 +104,11 @@ function Aside(content, type = 'note') {
     case 'update':
       icon = 'update.svg';
       title = i18n(`i18n.aside.${type}`, locale);
-      utilities.main = 'bg-state-update-bg color-state-update-text';
       break;
 
     case 'tip':
       icon = 'lightbulb.svg';
       title = i18n(`i18n.aside.${type}`, locale);
-      utilities.main = 'bg-state-good-bg color-state-good-text';
       break;
   }
 
@@ -144,16 +117,14 @@ function Aside(content, type = 'note') {
   // See https://github.com/GoogleChrome/web.dev/issues/7640
   const renderedContent = md.renderInline(content);
   const titleHTML = title.length
-      ? `<p class="cluster ${utilities.title}">
-      <span class="aside__icon box-block ${
-          utilities.icon
-      }">${getIcon()}</span>
+      ? `<p class="cluster">
+      <span class="aside__icon box-block">${getIcon(icon)}</span>
       <strong>${title}</strong></p>`
       : '';
   const asideHTML =
-      `<aside class="aside aside--${type} flow ${utilities.main}">
+      `<aside class="aside aside--${type} flow">
       ${titleHTML}
-      <div class="${utilities.body} flow">${renderedContent}</div></aside>`;
+      <div class="flow">${renderedContent}</div></aside>`;
 
   return html`${asideHTML}`;
 }
