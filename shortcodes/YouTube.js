@@ -44,13 +44,14 @@ function YouTube(...options) {
   }
 
   return html`
-    <div class="youtube">
-      <lite-youtube
-        videoid="${id}"
-        ${startTime ? `videoStartAt="${startTime}"` : ''}
-      >
-      </lite-youtube>
-    </div>
+      <div class="youtube">
+        <lite-youtube
+          videoid="${id}"
+          ${startTime ? `videoStartAt="${startTime}"` : ''}
+        >
+          <a class="youtube-fallback" href="https://www.youtube.com/watch?v=${id}">Watch on YouTube</a>
+        </lite-youtube>
+      </div>
   `.replace(/\n/g, '');
 }
 
