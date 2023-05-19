@@ -52,6 +52,7 @@ class I18nDictionary {
    * @param {string} dir The directory to walk
    */
   loadEntries(dir) {
+    // I am a test. Remove me.
     const files = fg.sync(path.join(dir, '/**/*.{yml,yaml}'));
 
     const baseDir = path.dirname(dir);
