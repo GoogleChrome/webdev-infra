@@ -120,10 +120,10 @@ const extractPosts = async external => {
 
 /**
  * @param {import('types').Feeds} feeds
- * @returns {Promise<import('types').AuthorsFeedData>}
+ * @returns {Promise<import('types').AuthorFeedData>}
  */
 const rssFeeds = async feeds => {
-  const authorFeeds = [];
+  const /** @type {import('types').AuthorFeedData} */ posts = {};
 
   for (const author in feeds) {
     const allPosts = [];
@@ -136,12 +136,10 @@ const rssFeeds = async feeds => {
       allPosts.push(...posts);
     }
 
-    const /** @type {import('types').AuthorFeedData} */ feedsObject = {};
-    feedsObject[author] = sortFeeds(allPosts);
-    authorFeeds.push(feedsObject);
+    posts[author] = sortFeeds(allPosts);
   }
 
-  return authorFeeds;
+  return posts;
 };
 
 module.exports = {rssFeeds};
