@@ -22,6 +22,8 @@
 
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
+const striptags = require('striptags');
+const excerpt = require('excerpt-html');
 
 /**
  * Sort the feeds from all sources by date from the newest to the oldest.
@@ -96,6 +98,18 @@ const extractPosts = async external => {
     } else {
       postData.date = $('pubDate', post).text();
       postData.summary = $('description', post).text();
+    }
+
+    if (!postData.summary) {
+      let content = $('content', post).text();
+      if (!content) content = $('content\\:encoded', post).text();
+      if (content) {
+        content = striptags(content);
+        // Replace all line-break characters with a single space, as excerpt-html
+        // would otherwise stop after the first break.
+        content = content.replace(/(?:\r\n|\r|\n)/g, ' ');
+        postData.summary = excerpt(content);
+      }
     }
 
     feeds.push(postData);
