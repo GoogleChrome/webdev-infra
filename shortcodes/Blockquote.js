@@ -30,6 +30,15 @@ function Blockquote(content, source, type) {
 
   const typeAttr = type ? `data-type="${type}"` : '';
 
+  if (process.env.ALT_BUILD) {
+    return html`
+    <blockquote>
+      ${md.renderInline(content)}
+      <cite>${md.renderInline(source)}</cite>
+    </blockquote>
+  `;
+  }
+
   return html`
     <blockquote ${typeAttr}>
       ${content}
