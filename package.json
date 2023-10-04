@@ -1,6 +1,6 @@
 {
   "name": "webdev-infra",
-  "version": "1.0.56",
+  "version": "1.0.57",
   "description": "Contains shared code for https://web.dev, https://developer.chrome.com and others.",
   "main": "index.js",
   "engines": {
@@ -26,7 +26,7 @@
     "@11ty/eleventy-cache-assets": "^2.3.0",
     "@imgix/js-core": "^3.1.3",
     "@justinribeiro/lite-youtube": "^0.9.1",
-    "@mdn/browser-compat-data": "5.2.x",
+    "@mdn/browser-compat-data": "5.3.x",
     "@swc/html": "0.0.18",
     "async-transforms": "^1.0.9",
     "browser-media-mime-type": "^1.0.0",
@@ -51,7 +51,7 @@
     "striptags": "^3.1.1"
   },
   "peerDependencies": {
-    "@mdn/browser-compat-data": "5.2.x"
+    "@mdn/browser-compat-data": "5.3.x"
   },
   "peerDependenciesMeta": {
     "@mdn/browser-compat-data": {
