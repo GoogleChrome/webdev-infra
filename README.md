@@ -1,9 +1,15 @@
-This is a placeholder README for the webdev-infra repo, which will contain
-shared code for https://web.dev, https://developer.chrome.com and others.
+> [!IMPORTANT]
+> As of 6 December, 2023, this project is no longer maintained as upstream projects have moved to another platform. See the [migration announcement](https://web.dev/blog/webdev-migration?hl=en) for more info.
 
-## 🚨 Important
+---
 
-When you make a change to this repo be sure to push a new tag.
+# webdev-infra
+
+This package contains code used for https://web.dev and https://developer.chrome.com.
+
+## Publish
+
+To publish a new version, update the version in the package.json and create a new tag.
 
 ```bash
 npm version patch
