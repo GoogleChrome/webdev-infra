@@ -1,0 +1,105 @@
+.wdi-impl-status {
+  --wdi-highlight-color: #DADCE0;
+  padding: 1.5rem;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      margin-top: -1.5em;
+    }
+
+    &:last-child {
+      margin-bottom: -1.5em;
+
+      .wdi-impl-status__text {
+        border: none;
+      }
+
+      .wdi-impl-status__icon:after {
+        display: none;
+      }
+    }
+  }
+  
+  &__icon {
+    border-radius: 50%;
+    flex: 1 0 auto;
+    width: 1.5em;
+    max-width: 1.5em;
+    height: 1.5em;
+    margin-right: 1em;
+    background-color: var(--wdi-highlight-color);
+    background-repeat: no-repeat no-repeat;
+    background-position: center center;
+    background-size: 40%;
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 20'%3E%3Cpath d='M.3 0v6l4 4-4 4v6h12v-6l-4-4 4-4V0H.3Zm10 14.5V18h-8v-3.5l4-4 4 4Zm-4-5-4-4V2h8v3.5l-4 4Z' fill='%23fff'/%3E%3C/svg%3E");
+    
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0.5em;
+      width: 0.25em;
+      height: 0.25em;
+      border-radius: 50%;
+      background-color: var(--wdi-highlight-color);
+    }
+
+    &.--skipped {
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 15'%3E%3Cpath fill='%23fff' d='m12 0 2 2L2 14l-2-2z'/%3E%3C/svg%3E");
+    }
+        
+    &.--completed {
+      --wdi-highlight-color: #188038;
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 14'%3E%3Cpath d='M6.3 11.2 2.1 7 .7 8.4 6.3 14l12-12L16.9.6 6.3 11.2Z' fill='%23fff'/%3E%3C/svg%3E");
+    }
+    
+    &.--in-progress {
+      --wdi-highlight-color: #F29900;
+      background-image: url("data:image/svg+xml,%3Csvg fill='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 22'%3E%3Cpath d='M8.3 5v3l4-4-4-4v3a8 8 0 0 0-6.8 12.3L3 13.8A6 6 0 0 1 8.3 5Zm6.8 1.7-1.5 1.5A6 6 0 0 1 8.3 17v-3l-4 4 4 4v-3a8 8 0 0 0 6.8-12.3Z' fill='%23fff'/%3E%3C/svg%3E");
+    }
+  }
+  
+  &__text {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    margin-left: 1.5em;
+    border-bottom: 1px solid lightgrey;
+
+    @include media-query('lg') {
+      flex-direction: row;
+      flex: 1 0 auto;
+      width: auto;
+    }
+  }
+  
+  &__label {
+    margin-right: auto;
+  }
+
+  &__link {
+    margin-top: 0.5em;
+
+    @include media-query('lg') {
+      margin-top: 0em;
+    }
+
+    &:not(a) {
+      font-weight: bold;
+    }
+  }
+}

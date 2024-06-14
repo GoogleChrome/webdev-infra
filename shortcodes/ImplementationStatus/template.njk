@@ -1,0 +1,17 @@
+<div class="wdi-impl-status">
+  <ul class="wdi-impl-status__list">
+    {%- for stepName, step in implStatus.steps -%}
+    <li class="wdi-impl-status__item">
+      <div class="wdi-impl-status__icon --{{ step.statusKey }}"></div>
+      <div class="wdi-impl-status__text">
+        <div class="wdi-impl-status__label">{{ step.label }}</div>
+        {%- if step.url -%}
+        <a href="{{ step.url }}" class="wdi-impl-status__link">{{ step.status }}</a>
+        {%- else -%}
+        <div class="wdi-impl-status__link">{{ step.status }}</div>
+        {%- endif -%}
+      </div>
+    </li>
+    {%- endfor -%}
+  </ul>
+</div>

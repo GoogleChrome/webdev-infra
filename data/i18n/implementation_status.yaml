@@ -1,0 +1,101 @@
+implementation_status:
+  en: Implementation status
+  es: Estado de implementación
+  ja: 実施状況
+  ko: 시행현황
+  pt: Status de implementação
+  ru: Статус реализации
+  zh: 实施情况
+
+current_status:
+  en: Current Status
+  es: Estado actual
+  ja: 現在のステータス
+  ko: 현재 상태
+  pt: Status atual
+  ru: Текущий статус
+  zh: 当前状态
+
+create_explainer:
+  en: Create explainer
+  es: Crear explicador
+  ja: 説明者を作成します
+  ko: 설명자를 만듭니다
+  pt: Criar explicador
+  ru: Создайте объяснение
+  zh: 创建解释器
+
+create_spec:
+  en: Create initial draft of specification
+  es: Crear un borrador inicial de especificación
+  ja: 仕様の初期ドラフトを作成します
+  ko: 사양의 초기 초안을 만듭니다
+  pt: Crie rascunho inicial de especificação
+  ru: Создать первоначальный проект спецификации
+  zh: 创建规格的初始草稿
+
+gather_feedback:
+  en: Gather feedback and iterate on design
+  es: Recopilar comentarios e iterar en el diseño
+  ja: フィードバックを収集し、デザインを繰り返します
+  ko: 피드백을 수집하고 디자인에 반복하십시오
+  pt: Reúna feedback e itera sobre o design
+  ru: Соберите обратную связь и вытекает на дизайн
+  zh: 收集反馈并迭代设计
+
+origin_trial:
+  en: Origin trial
+
+launch:
+  en: Launch
+  es: Lanzar
+  ja: 発売
+  ko: 시작하다
+  pt: Lançar
+  ru: Запуск
+  zh: 发射
+
+not_started:
+  en: Not started
+  es: No empezado
+  ja: 始まっていない
+  ko: 시작되지 않았습니다
+  pt: Não foi iniciado
+  ru: Не начато
+  zh: 没有开始
+
+started:
+  en: Started
+  es: Empezado
+  ja: 始まった
+  ko: 시작
+  pt: Começado
+  ru: Начал
+  zh: 开始
+
+in_progress:
+  en: In progress
+  es: En curso
+  ja: 進行中
+  ko: 진행 중
+  pt: Em progresso
+  ru: В ходе выполнения
+  zh: 进行中
+
+completed:
+  en: Completed
+  es: Terminado
+  ja: 完了しました
+  ko: 완전한
+  pt: Concluído
+  ru: Завершенный
+  zh: 完全的
+
+developer_trial:
+  en: Developer Trial
+  es: Prueba de desarrollador
+  ja: 開発者トライアル
+  ko: 개발자 시험
+  pt: Estudo de desenvolvedor
+  ru: Испытание разработчика
+  zh: 开发人员试验
